@@ -26,6 +26,6 @@ redoc:
     - mongo
   restart: always
   environment:
-    ROOT_URL: "https://docs.reactioncommerce.com"
+    ROOT_URL: "https://docs.rocket.chat"
     MONGO_URL: "mongodb://mongo:27017/redoc"
-    VIRTUAL_HOST: "docs.reactioncommerce.com"
+    VIRTUAL_HOST: "docs.rocket.chat"

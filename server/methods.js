@@ -109,6 +109,7 @@ Meteor.methods({
     for (let repo of repos) {
       let repoData;
       let releaseData;
+      let branchesData;
       const apiUrl = repo.apiUrl || `https://api.github.com/repos/${repo.org}/${repo.repo}`; // should we maybe clean off prefixes?
       const rawUrl = repo.rawUrl || `https://raw.githubusercontent.com/${repo.org}/${repo.repo}`;
 
@@ -128,22 +129,34 @@ Meteor.methods({
         });
         // get release data
         if (repoData && releaseData) {
-          ReDoc.Collections.Repos.upsert({
-            _id: repo._id
-          }, {
-            $set: {
-              repo: repo.repo,
-              org: repo.org,
-              label: repo.label || result.data.name,
-              description: repo.description || repoData.data.description,
-              data: repoData.data,
-              apiUrl: apiUrl || repoData.data.url,
-              rawUrl: rawUrl,
-              release: releaseData.data
+          // fetch repo branches data
+          branchesData = Meteor.http.get(apiUrl + '/branches' + authString, {
+            headers: {
+              "User-Agent": "ReDoc/1.0"
             }
           });
-          // populate docset
-          Meteor.call("redoc/getDocSet", repo.repo);
+          // get branches data
+          if (repoData && branchesData) {
+            ReDoc.Collections.Repos.upsert({
+              _id: repo._id
+            }, {
+              $set: {
+                repo: repo.repo,
+                org: repo.org,
+                label: repo.label || result.data.name,
+                description: repo.description || repoData.data.description,
+                data: repoData.data,
+                apiUrl: apiUrl || repoData.data.url,
+                rawUrl: rawUrl,
+                release: releaseData.data,
+                branches: branchesData.data,
+                defaultBranch: repoData.data.default_branch
+              }
+            });
+
+            // populate docset
+            Meteor.call("redoc/getDocSet", repo.repo);
+          }
         }
       }
     } // end loop
@@ -156,9 +169,9 @@ Meteor.methods({
    *  @returns {undefined} returns
    */
   "redoc/getDocSet": function (repo, fetchBranch) {
+    console.log('[methods] redoc/getDocSet ->', repo, fetchBranch);
     check(repo, String);
     check(fetchBranch,  Match.Optional(String, null));
-    const branch = fetchBranch || "development";
     // get repo details
     const docRepo = ReDoc.Collections.Repos.findOne({
       repo: repo
@@ -168,6 +181,18 @@ Meteor.methods({
     if (!docRepo) {
       console.log(`redoc/getDocSet: Failed to load repo data for ${repo}`);
       return false;
+    }
+
+    let branch = "master";
+
+    if (fetchBranch) {
+      branch = fetchBranch;
+    } else if (docRepo.branches.length > 0) {
+      for (_branch of docRepo.branches) {
+        Meteor.call("redoc/getDocSet", repo, _branch.name);
+      }
+    } else {
+      branch = docRepo.defaultBranch || "master";
     }
 
     // assemble TOC

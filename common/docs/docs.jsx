@@ -46,7 +46,7 @@ export default DocView = React.createClass({
 
   renderMenu() {
     const items = this.data.docs.map((item) => {
-      const branch = this.props.params.branch || "development";
+      const branch = this.props.params.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
 
       return (
@@ -96,7 +96,7 @@ export default DocView = React.createClass({
       label = this.data.currentDoc.label;
     }
 
-    const pageTitle = `Reaction Docs - ${label}`;
+    const pageTitle = `Rocket.Chat Docs - ${label}`;
 
     return (
       <div className="redoc docs">

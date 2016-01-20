@@ -1,13 +1,13 @@
 {
   "public": {
     "ga": {
-      "account": "UA-44704216-5"
+      "account": ""
     }
   },
   "services": [{
     "github": {
-      "clientId": "",
-      "secret": ""
+      "clientId": "66cbde5c89f1aa9ba0db",
+      "secret": "d1a5ea339065da03126adc7e1d4c1288342cff60"
     }
   }],
   "redoc": {

@@ -18,7 +18,7 @@ export default DocView = React.createClass({
 
   handleBranchSelect(selectedBranch) {
     if (this.props.history) {
-      const branch = selectedBranch || this.props.params.branch || "development";
+      const branch = selectedBranch || this.props.params.branch || "master";
       const params = this.props.params;
       const url = `/${params.repo}/${branch}/${params.alias}`;
 
@@ -38,11 +38,13 @@ export default DocView = React.createClass({
 
   renderMainNavigationLinks() {
     return [
-      <a className="nav-link" href="https://reactioncommerce.com/features">{"Features"}</a>,
-      <a className="nav-link" href="https://reactioncommerce.com/partners">{"Partners"}</a>,
-      <a className="nav-link active" href="https://docs.reactioncommerce.com">{"Docs"}</a>,
-      <a className="nav-link" href="https://reactioncommerce.com/about">{"About"}</a>,
-      <a className="nav-link" href="http://blog.reactioncommerce.com">{"Blog"}</a>
+      <a className="nav-link" href="https://demo.rocket.chat">{"Demo"}</a>,
+      <a className="nav-link" href="https://rocket.chat/#features">{"Features"}</a>,
+      <a className="nav-link" href="https://rocket.chat/#rocket-team">{"Team"}</a>,
+      <a className="nav-link active" href="https://docs.rocket.chat">{"Docs"}</a>,
+      <a className="nav-link" href="https://rocket.chat/blog">{"Blog"}</a>,
+      <a className="nav-link" href="https://rocket.chat/releases">{"Download"}</a>,
+      <a className="nav-link" href="https://rocket.chat/contact">{"Contact"}</a>
     ];
   },
 
@@ -53,9 +55,9 @@ export default DocView = React.createClass({
           <button className="redoc menu-button" onClick={this.handleMenuToggle}>
             <i className="fa fa-bars"></i>
           </button>
-          <a className="title" href="https://reactioncommerce.com">
+          <a className="title" href="https://rocket.chat">
             <img className="logo" src="/images/logo.png" />
-            {"Reaction"}
+            {"Rocket.Chat"}
           </a>
         </div>
         <div className="navigation">

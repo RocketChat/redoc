@@ -15,6 +15,7 @@ Meteor.publish("Repos", function () {
  *  checks if request docs exists first then pulls new data if there is none
  */
 Meteor.publish("CacheDocs", function (params) {
+  console.log("[publish] CacheDocs ->", params);
   // some minor validation
   check(params, {
     repo: Match.Optional(String, null),
@@ -28,7 +29,7 @@ Meteor.publish("CacheDocs", function (params) {
       default: true
     });
     params.repo = defaultDoc.repo;
-    params.branch = "development";
+    params.branch = "master";
     params.alias = defaultDoc.alias;
   }
 
