@@ -14,7 +14,7 @@ export default DocView = React.createClass({
     if (Meteor.isClient) {
       data = {
         tocIsLoaded: tocSub.ready(),
-        docs: ReDoc.Collections.TOC.find().fetch(),
+        docs: ReDoc.Collections.TOC.find({}, { sort: { sort: 1 } }).fetch(),
         isMenuVisible: Session.get("isMenuVisible")
       };
     }
@@ -38,17 +38,26 @@ export default DocView = React.createClass({
     }
   },
 
-  renderMenu() {
-    const items = this.data.docs.map((item) => {
+  renderMenu: function(parentPath) {
+    let self = this;
+    let items = [];
+    let parentItems = _.filter(this.data.docs, function(item) { return item.parentPath === parentPath });
+    if (parentItems.length === 0) {
+      return [];
+    }
+
+    const className = parentPath ? 'guide-sub-nav-item' : 'guide-nav-item';
+    for (let item of parentItems) {
       const branch = this.props.params.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
-
-      return (
-        <li className={item.class}>
+      items.push (
+        <li className={className}>
           <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
         </li>
-      );
-    });
+      )
+      currentPath = s.strLeftBack(item.docPath, '/README.md'); // Dirs path has /README.md attached to them
+      items = items.concat(self.renderMenu(currentPath));
+    }
 
     return items;
   },
@@ -66,13 +75,20 @@ export default DocView = React.createClass({
               <ul>
                 <li className="reaction-nav-item primary">
                   <img className="logo" src="/images/logo.png" />
-                  <a className="nav-link" href="https://reactioncommerce.com">{"Reaction"}</a>
+                  <a className="nav-link" href="https://rocket.chat"> {"Rocket.Chat"} </a>
                 </li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/features">{"Features"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/partners">{"Partners"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link active" href="https://docs.reactioncommerce.com">{"Docs"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/about">{"About"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="http://blog.reactioncommerce.com">{"Blog"}</a></li>
+                <li className="reaction-nav-item"><a className="nav-link" href="https://demo.rocket.chat">{"Demo"}</a></li>
+                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/#features">{"Features"}</a></li>
+                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/#rocket-team">{"Team"}</a></li>
+                <li className="reaction-nav-item"><a className="nav-link active" href="https://docs.rocket.chat">{"Docs"}</a></li>
+                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/blog">{"Blog"}</a></li>
+                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/releases">{"Download"}</a></li>
+                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/contact">{"Contact"}</a></li>
 
                 {this.renderMenu()}
               </ul>

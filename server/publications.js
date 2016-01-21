@@ -15,6 +15,8 @@ Meteor.publish("Repos", function () {
  *  checks if request docs exists first then pulls new data if there is none
  */
 Meteor.publish("CacheDocs", function (params) {
+  console.log("CacheDocs", params);
+
   // some minor validation
   check(params, {
     repo: Match.Optional(String, null),
@@ -24,13 +26,13 @@ Meteor.publish("CacheDocs", function (params) {
 
   // if we have no params, we're the root document
   if (Object.keys(params).length === 0) {
-    defaultDoc = ReDoc.Collections.TOC.findOne({
-      default: true
-    });
+    defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
     params.repo = defaultDoc.repo;
-    params.branch = "master";
+    params.branch = defaultDoc.branch;
     params.alias = defaultDoc.alias;
   }
+
+  console.log('afterParams', params);
 
   // get repo details
   let docRepo = ReDoc.Collections.Repos.findOne({
@@ -60,7 +62,7 @@ Meteor.publish("CacheDocs", function (params) {
 
   // check if we need to fetch new docs
   if (cacheDoc.count() === 0 && docTOC) {
-    Meteor.call("redoc/getDocSet", params.repo, params.branch);
+    Meteor.call("redoc/getDocsFromTOC", params.repo, params.branch);
   }
   // return cache doc
   return ReDoc.Collections.Docs.find({

@@ -17,15 +17,23 @@ export default DocView = React.createClass({
         },
         sort: {isoScore: -1}
       });
-
+      let params = this.props.params;
+      if (Object.keys(params).length === 0) {
+        defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
+        params.repo = defaultDoc.repo;
+        params.branch = defaultDoc.branch;
+        params.alias = defaultDoc.alias;
+      }
+      console.log('load cache', params);
       return {
         docIsLoaded: sub.ready(),
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        currentDoc: ReDoc.Collections.Docs.findOne(params),
         search: search
       };
     }
 
     if (Meteor.isServer) {
+      console.log('load cache', this.props.params);
       return {
         docIsLoaded: sub.ready(),
         currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),

@@ -50,5 +50,5 @@ Meteor.startup(function () {
     }
   }
   // Initialize Repo data
-  Meteor.call("redoc/initRepoData");
+  Meteor.call("redoc/flushData");
 });

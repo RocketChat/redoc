@@ -32,6 +32,7 @@ ongoworks:spiderable
 #kadira:blaze-layout
 #kadira:react-layout
 nfl:react-helmet
+underscorestring:underscore.string
 
 reactrouter:react-router
 reactrouter:react-router-ssr
