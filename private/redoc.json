@@ -4,13 +4,60 @@
     "repo": "Rocket.Chat.Docs",
     "label": "Rocket Chat",
     "description": "Rocket Chat"
-  }],
-  "tocData": [{
-    "class": "guide-nav-item",
-    "alias": "readme",
-    "label": "README",
-    "repo": "Rocket.Chat.Docs",
-    "docPath": "content/index.md",
-    "default": true
   }]
+  // ,"tocData": [{
+  //   "class": "guide-nav-item",
+  //   "alias": "readme",
+  //   "label": "Introduction",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "README.md"
+  // }, {
+  //   "class": "guide-sub-nav-item",
+  //   "alias": "contributing",
+  //   "label": "Contributing",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "Basic/CONTRIBUTING.md"
+  // }, {
+  //   "class": "guide-sub-nav-item",
+  //   "alias": "promoting",
+  //   "label": "Help Promote",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "Basic/promoter_info.md"
+  // }, {
+  //   "class": "guide-sub-nav-item",
+  //   "alias": "security",
+  //   "label": "Reporting Security Issues",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "Basic/reporting_security_issues.md"
+  // }, {
+  //   "class": "guide-nav-item",
+  //   "alias": "deployment",
+  //   "label": "Deployment",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "Deployment/index.md"
+  // }, {
+  //   "class": "guide-sub-nav-item",
+  //   "alias": "deployment-aws",
+  //   "label": "AWS",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "Deployment/AWS.md"
+  // }, {
+  //   "class": "guide-sub-nav-item",
+  //   "alias": "deployment-aliyun",
+  //   "label": "Aliyun",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "Deployment/aliyun.md"
+  // }, {
+  //   "class": "guide-sub-nav-item",
+  //   "alias": "deployment-ansible",
+  //   "label": "Ansible",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "Deployment/ansible.md"
+  // }, {
+  //   "class": "guide-sub-nav-item",
+  //   "alias": "deployment-bluemix",
+  //   "label": "Bluemix",
+  //   "repo": "Rocket.Chat.Docs",
+  //   "docPath": "Deployment/bluemix.md"
+  // }]
 }

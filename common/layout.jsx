@@ -33,19 +33,6 @@ export default BaseLayout = React.createClass({
     }
   },
 
-  renderTopNavigation() {
-    return (
-      <div className="navigation">
-        <a className="nav-link" href="https://demo.rocket.chat">{"Demo"}</a>
-        <a className="nav-link" href="https://rocket.chat/#features">{"Features"}</a>
-        <a className="nav-link" href="https://rocke.tchat/#team">{"Team"}</a>
-        <a className="nav-link active" href="https://docs.rocket.chat">{"Docs"}</a>
-        <a className="nav-link" href="https://rocket.chat/blog">{"Blog"}</a>
-        <a className="nav-link" href="https://rocket.chat/contact">{"Contact"}</a>
-      </div>
-    );
-  },
-
   render() {
     return (
       <div className="redoc page">
@@ -63,7 +50,6 @@ export default BaseLayout = React.createClass({
           ]}
           title={"Rocket.Chat Docs"}
         />
-        {/*this.renderTopNavigation()*/}
         <Header
           history={this.props.history}
           params={this.props.params}

@@ -66,6 +66,7 @@ export default DocView = React.createClass({
         <div className="filters">
           <div className="item">
             <BranchSelect
+              repo={this.props.params.repo}
               currentBranch={this.props.params.branch}
               onBranchSelect={this.handleBranchSelect}
             />
