@@ -24,7 +24,6 @@ export default DocView = React.createClass({
         params.branch = defaultDoc.branch;
         params.alias = defaultDoc.alias;
       }
-      console.log('load cache', params);
       return {
         docIsLoaded: sub.ready(),
         currentDoc: ReDoc.Collections.Docs.findOne(params),
@@ -33,7 +32,6 @@ export default DocView = React.createClass({
     }
 
     if (Meteor.isServer) {
-      console.log('load cache', this.props.params);
       return {
         docIsLoaded: sub.ready(),
         currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),

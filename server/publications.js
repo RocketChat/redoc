@@ -15,8 +15,6 @@ Meteor.publish("Repos", function () {
  *  checks if request docs exists first then pulls new data if there is none
  */
 Meteor.publish("CacheDocs", function (params) {
-  console.log("CacheDocs", params);
-
   // some minor validation
   check(params, {
     repo: Match.Optional(String, null),
@@ -31,8 +29,6 @@ Meteor.publish("CacheDocs", function (params) {
     params.branch = defaultDoc.branch;
     params.alias = defaultDoc.alias;
   }
-
-  console.log('afterParams', params);
 
   // get repo details
   let docRepo = ReDoc.Collections.Repos.findOne({
