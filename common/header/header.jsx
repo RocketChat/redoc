@@ -56,7 +56,7 @@ export default DocView = React.createClass({
             <i className="fa fa-bars"></i>
           </button>
           <a className="title" href="https://rocket.chat">
-            <img className="logo" src="/images/logo.png" />
+            <img className="logo" src="images/logo.png" />
             {"Rocket.Chat"}
           </a>
         </div>

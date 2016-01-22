@@ -11,14 +11,33 @@ const AppRoutes = (
   </Route>
 );
 
-ReactRouterSSR.Run(AppRoutes, {
+let clientOptions = {
   props: {
     onUpdate() {
       // Notify the page has been changed to Google Analytics
       ga("send", "pageview");
     }
   }
-}, {
+}
+
+if (Meteor.isClient) {
+  import { createHistory, useBasename } from 'history'
+
+  // Run our app under the /base URL.
+  let history = useBasename(createHistory)({
+    basename: '/docs/'
+  })
+
+  // At the /base/hello/world URL:
+  history.listen(function (location) {
+    console.log(location.pathname) // /hello/world
+    console.log(location.basename) // /base
+  })
+
+  clientOptions.history = history
+}
+
+ReactRouterSSR.Run(AppRoutes, clientOptions, {
   preRender: (req, res) => {
     ReactCookie.plugToRequest(req, res);
   }

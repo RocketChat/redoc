@@ -74,14 +74,9 @@ export default DocView = React.createClass({
             <div className="menu">
               <ul>
                 <li className="reaction-nav-item primary">
-                  <img className="logo" src="/images/logo.png" />
+                  <img className="logo" src="images/logo.png" />
                   <a className="nav-link" href="https://rocket.chat"> {"Rocket.Chat"} </a>
                 </li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/features">{"Features"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/partners">{"Partners"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link active" href="https://docs.reactioncommerce.com">{"Docs"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://reactioncommerce.com/about">{"About"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="http://blog.reactioncommerce.com">{"Blog"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://demo.rocket.chat">{"Demo"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/#features">{"Features"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/#rocket-team">{"Team"}</a></li>

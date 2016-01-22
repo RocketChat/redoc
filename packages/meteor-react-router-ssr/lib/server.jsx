@@ -236,6 +236,8 @@ function generateSSRData(serverOptions, context, req, res, renderProps) {
         head = ReactHelmet.rewind();
       }
 
+      console.log(head);
+
       css = global.__STYLE_COLLECTOR__;
 
       if (serverOptions.postRender) {

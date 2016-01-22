@@ -12,6 +12,10 @@ export default BaseLayout = React.createClass({
       data.isMenuVisible = Session.equals("isMenuVisible", true);
     }
 
+    if (__meteor_runtime_config__ && __meteor_runtime_config__.ROOT_URL) {
+      data.rootURL = __meteor_runtime_config__.ROOT_URL;
+    }
+
     return data;
   },
 
@@ -41,13 +45,14 @@ export default BaseLayout = React.createClass({
             {name: "viewport", content: "width=device-width"},
             {property: "og:title", content: "Rocket.Chat - The ultimate Open Source web chat platform"},
             {property: "og:description", content: "From group messages and video calls all the way to helpdesk killer features our goal is to become the number one cross-platform open source chat solution."},
-            {property: "og:url", content: "https://docs.rocket.chat"},
-            {property: "og:image", content: "https://docs.rocket.chat/images/logo.png"}
+            {property: "og:url", content: this.data.rootURL},
+            {property: "og:image", content: this.data.rootURL + "images/logo.png"}
           ]}
           link={[
-            {rel: "canonical", href: "https://docs.rocket.chat"},
+            {rel: "canonical", href: this.data.rootURL},
             {rel: "icon", href: "/favicon.png", type: "type/png"}
           ]}
+          base={{"href": this.data.rootURL}}
           title={"Rocket.Chat Docs"}
         />
         <Header
