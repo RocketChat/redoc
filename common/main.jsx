@@ -30,8 +30,10 @@ if (Meteor.isClient) {
 
   // At the /base/hello/world URL:
   history.listen(function (location) {
-    console.log(location.pathname) // /hello/world
-    console.log(location.basename) // /base
+    if (location.basename !== '/docs/') {
+      location.pathname = "/";
+      location.basename = "/docs/";
+    }
   })
 
   clientOptions.history = history
