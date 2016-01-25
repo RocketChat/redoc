@@ -80,7 +80,7 @@ export default DocView = React.createClass({
                 <li className="reaction-nav-item"><a className="nav-link" href="https://demo.rocket.chat">{"Demo"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/#features">{"Features"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/#rocket-team">{"Team"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link active" href="https://docs.rocket.chat">{"Docs"}</a></li>
+                <li className="reaction-nav-item"><a className="nav-link active" href="https://rocket.chat/docs">{"Docs"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/blog">{"Blog"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/releases">{"Download"}</a></li>
                 <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/contact">{"Contact"}</a></li>

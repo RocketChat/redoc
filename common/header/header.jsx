@@ -41,7 +41,7 @@ export default DocView = React.createClass({
       <a className="nav-link" href="https://demo.rocket.chat">{"Demo"}</a>,
       <a className="nav-link" href="https://rocket.chat/#features">{"Features"}</a>,
       <a className="nav-link" href="https://rocket.chat/#rocket-team">{"Team"}</a>,
-      <a className="nav-link active" href="https://docs.rocket.chat">{"Docs"}</a>,
+      <a className="nav-link active" href="https://rocket.chat/docs">{"Docs"}</a>,
       <a className="nav-link" href="https://rocket.chat/blog">{"Blog"}</a>,
       <a className="nav-link" href="https://rocket.chat/releases">{"Download"}</a>,
       <a className="nav-link" href="https://rocket.chat/contact">{"Contact"}</a>
