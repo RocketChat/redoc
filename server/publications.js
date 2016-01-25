@@ -24,7 +24,7 @@ Meteor.publish("CacheDocs", function (params) {
 
   // if we have no params, we're the root document
   if (Object.keys(params).length === 0) {
-    defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
+    let defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
     params.repo = defaultDoc.repo;
     params.branch = defaultDoc.branch;
     params.alias = defaultDoc.alias;

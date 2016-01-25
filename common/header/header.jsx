@@ -1,7 +1,7 @@
 import SearchField from "../search/search.jsx";
 import BranchSelect from "../docs/branchSelect.jsx";
 
-export default DocView = React.createClass({
+export default React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {

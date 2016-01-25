@@ -4,7 +4,7 @@ import SearchResults from "../search/searchResults.jsx";
 import classnames from "classnames";
 import "underscore";
 
-export default DocView = React.createClass({
+export default React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
@@ -55,7 +55,7 @@ export default DocView = React.createClass({
           <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
         </li>
       )
-      currentPath = s.strLeftBack(item.docPath, '/README.md'); // Dirs path has /README.md attached to them
+      let currentPath = s.strLeftBack(item.docPath, '/README.md'); // Dirs path has /README.md attached to them
       items = items.concat(self.renderMenu(currentPath));
     }
 

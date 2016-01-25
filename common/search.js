@@ -12,7 +12,7 @@ if (Meteor.isClient) {
 
   const fields = ["docPageContentHTML"];
 
-  DocSearch = new SearchSource("docs", fields, options);
+  global.DocSearch = new SearchSource("docs", fields, options);
 }
 
 

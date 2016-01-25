@@ -4,7 +4,7 @@ import TableOfContents from "./toc.jsx";
 import SearchResults from "../search/searchResults.jsx";
 import "underscore";
 
-export default DocView = React.createClass({
+export default React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
@@ -19,7 +19,7 @@ export default DocView = React.createClass({
       });
       let params = this.props.params;
       if (Object.keys(params).length === 0) {
-        defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
+        let defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
         params.repo = defaultDoc.repo;
         params.branch = defaultDoc.branch;
         params.alias = defaultDoc.alias;

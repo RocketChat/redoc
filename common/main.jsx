@@ -1,6 +1,7 @@
 import Layout from "../common/layout.jsx";
 import Docs from "../common/docs/docs.jsx";
 import ReactCookie from "react-cookie";
+import { createHistory, useBasename } from 'history'
 
 const {Route, IndexRoute} = ReactRouter;
 
@@ -27,7 +28,6 @@ let getBasename = function() {
 }
 
 if (Meteor.isClient) {
-  import { createHistory, useBasename } from 'history'
 
   // Run our app under the /base URL.
   let history = useBasename(createHistory)({

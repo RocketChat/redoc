@@ -28,12 +28,12 @@
 Meteor.startup(function () {
   // Import settings
   if (Meteor.settings.services) {
-    for (services of Meteor.settings.services) {
-      for (service in services) {
+    for (let services of Meteor.settings.services) {
+      for (let service in services) {
         // this is just a sanity check required by linter
         if ({}.hasOwnProperty.call(services, service)) {
           // actual settings for the service
-          settings = services[service];
+          let settings = services[service];
           ServiceConfiguration.configurations.upsert({
             service: service
           }, {
@@ -42,7 +42,7 @@ Meteor.startup(function () {
           // if we have github credentials we'll also created
           // some an auth param string for api requests
           if (service === "github") {
-            authString = `?client_id=${settings.clientId}&client_secret=${settings.secret}`;
+            global.authString = `?client_id=${settings.clientId}&client_secret=${settings.secret}`;
           }
           console.log("service configuration loaded: " + service);
         }

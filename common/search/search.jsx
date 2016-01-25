@@ -1,6 +1,6 @@
 
 
-export default SearchField = React.createClass({
+export default React.createClass({
   // mixins: [ReactMeteorData],
 
   getIniitalState() {

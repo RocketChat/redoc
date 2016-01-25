@@ -7,7 +7,7 @@ import "underscore";
 
 export let hljs = require("highlight.js");
 
-md = require("markdown-it")({
+let md = require("markdown-it")({
   html: true,
   linkify: true,
   typographer: true,
@@ -202,12 +202,13 @@ Meteor.methods({
 
       if (contentData && contentData.data) {
         for (let sortIndex in contentData.data) {
-          tocItem = contentData.data[sortIndex];
+          let tocItem = contentData.data[sortIndex];
 
           if (tocItem.type === 'file' && tocItem.path !== "README.md" && (tocItem.name.indexOf('.md') === -1 || tocItem.name === "README.md")) {
             continue;
           }
 
+          let matches, sort;
           if (matches = tocItem.name.match(/^(\d+)/)) {
             sort = s.toNumber(matches[1]);
           } else {

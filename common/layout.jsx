@@ -1,6 +1,6 @@
 import Header from "./header/header.jsx";
 
-export default BaseLayout = React.createClass({
+export default React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {

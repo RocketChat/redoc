@@ -1,10 +1,10 @@
 
-export default BranchSelect = React.createClass({
+export default React.createClass({
   mixins: [ReactMeteorData],
 
   getMeteorData() {
     let branches = [];
-    repo = ReDoc.Collections.Repos.findOne({ repo: this.props.repo });
+    let repo = ReDoc.Collections.Repos.findOne({ repo: this.props.repo });
     if (repo) {
       branches = repo.branches.map(function(branch) {
         return branch.name;

@@ -1,6 +1,6 @@
 import "underscore";
 
-export default SearchResults = React.createClass({
+export default React.createClass({
   handleSearchClear() {
     DocSearch.search("");
   },
