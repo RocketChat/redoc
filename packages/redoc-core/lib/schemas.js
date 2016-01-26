@@ -77,7 +77,8 @@ ReDoc.Schemas.TOC = new SimpleSchema({
     optional: true
   },
   sort: {
-    type: Number
+    type: Number,
+    optional: true
   },
   default: {
     type: Boolean,
