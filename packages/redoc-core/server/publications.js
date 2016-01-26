@@ -25,9 +25,11 @@ Meteor.publish("CacheDocs", function (params) {
   // if we have no params, we're the root document
   if (Object.keys(params).length === 0) {
     let defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
-    params.repo = defaultDoc.repo;
-    params.branch = defaultDoc.branch || Meteor.settings.public.redoc.branch || "master";
-    params.alias = defaultDoc.alias;
+    if (defaultDoc) {
+      params.repo = defaultDoc.repo;
+      params.branch = defaultDoc.branch || Meteor.settings.public.redoc.branch || "master";
+      params.alias = defaultDoc.alias;
+    }
   }
 
   if (!params.branch) {
@@ -45,6 +47,11 @@ Meteor.publish("CacheDocs", function (params) {
   }
   if (!docRepo) {
     console.log("CacheDocs Publication: Failed to load repo data for document cache request", params);
+    return this.ready();
+  }
+
+  if (!params.repo) {
+    params.repo = docRepo.repo;
   }
 
   // assemble TOC
@@ -62,7 +69,8 @@ Meteor.publish("CacheDocs", function (params) {
 
   // check if we need to fetch new docs
   if (cacheDoc.count() === 0 && docTOC) {
-    Meteor.call("redoc/getDocsFromTOC", params.repo, params.branch);
+    Meteor.call("redoc/getDocSet", params.repo, params.branch);
+    // Meteor.call("redoc/getDocsFromTOC", params.repo, params.branch);
   }
   // return cache doc
   return ReDoc.Collections.Docs.find({
