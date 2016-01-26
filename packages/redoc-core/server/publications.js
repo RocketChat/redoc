@@ -29,6 +29,11 @@ Meteor.publish("CacheDocs", function (params) {
     params.branch = defaultDoc.branch || Meteor.settings.public.redoc.branch || "master";
     params.alias = defaultDoc.alias;
   }
+
+  if (!params.branch) {
+    params.branch = Meteor.settings.public.redoc.branch || "master";
+  }
+
   // get repo details
   let docRepo = ReDoc.Collections.Repos.findOne({
     repo: params.repo

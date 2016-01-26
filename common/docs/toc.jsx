@@ -39,10 +39,10 @@ export default React.createClass({
   },
 
   renderMainNavigationLinks(active) {
-    let links = [];
+    let links = [], link;
     for (link of Meteor.settings.public.redoc.mainNavigationLinks) {
       let className = (link.href === active || link.value === active) ? "nav-link active" : "nav-link";
-      links.push(<li className="reaction-nav-item"><a className={className} href={link.href}>{link.value}</a></li>);
+      links.push(<li key={"nav-link-" + link.href} className="reaction-nav-item"><a className={className} href={link.href}>{link.value}</a></li>);
     }
     return links;
   },
@@ -54,16 +54,13 @@ export default React.createClass({
     if (parentItems.length === 0) {
       return [];
     }
-    const items = this.data.docs.map((item) => {
+    const className = parentPath ? 'guide-sub-nav-item' : 'guide-nav-item';
+    console.log(parentItems);
+    for (let item of parentItems) {
       const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;
-
-    const className = parentPath ? 'guide-sub-nav-item' : 'guide-nav-item';
-    for (let item of parentItems) {
-      const branch = this.props.params.branch || "master";
-      const url = `/${item.repo}/${branch}/${item.alias}`;
       items.push (
-        <li className={className}>
+        <li key={"guide-nav-item-" + url} className={className}>
           <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
         </li>
       )

@@ -2,7 +2,7 @@
 * Define app globals
 */
 
-global.ReDoc = {};
+ReDoc = {};
 ReDoc.Subscriptions = {};
 ReDoc.Collections = {};
 ReDoc.Schemas = {};

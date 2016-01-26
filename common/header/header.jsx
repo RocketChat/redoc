@@ -37,10 +37,10 @@ export default React.createClass({
   },
 
   renderMainNavigationLinks(active) {
-    let links = [];
+    let links = [], link;
     for (link of Meteor.settings.public.redoc.mainNavigationLinks) {
       let className = (link.href === active || link.value === active) ? "nav-link active" : "nav-link";
-      links.push(<a className={className} href={link.href}>{link.value}</a>);
+      links.push(<a key={link.href} className={className} href={link.href}>{link.value}</a>);
     }
     return links;
   },

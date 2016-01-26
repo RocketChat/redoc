@@ -4,29 +4,31 @@
       "account": ""
     },
     "gitter": {
-      "room": "reactioncommerce/redoc"
+      "room": ""
     },
     "redoc": {
-      "title": "Reaction Docs",
+      "title": "Rocket.Chat Docs",
       "meta": {
-        "title": "Reaction Commerce | A completely open source JavaScript ecommerce solution",
-        "description": "Reaction Commerce is a modern, global, real time reactive, open source ecommerce platform for small and medium-sized businesses that is built with JavaScript, Node.js, MongoDB, Meteor, and Docker.",
-        "url": "https://docs.reactioncommerce.com",
-        "image": "https://docs.reactioncommerce.com/images/facebook-reaction-profile.png",
+        "title": "Rocket.Chat - The ultimate Open Source web chat platform",
+        "description": "From group messages and video calls all the way to helpdesk killer features our goal is to become the number one cross-platform open source chat solution.",
+        "url": "https://rocket.chat/docs",
+        "image": "https://rocket.chat/images/logo.png",
         "favicon": "/favicon.png"
       },
       "mainNavigationLinks": [
-        { "href": "https://reactioncommerce.com/features", "value": "Features" },
-        { "href": "https://reactioncommerce.com/partners", "value": "Partners" },
-        { "href": "https://docs.reactioncommerce.com", "value": "Docs" },
-        { "href": "https://reactioncommerce.com/about", "value": "About" },
-        { "href": "http://blog.reactioncommerce.com", "value": "Blog" }
+        { "href": "https://rocket.chat/#live-demo", "value": "Demo" },
+        { "href": "https://rocket.chat/#features", "value": "Features" },
+        { "href": "https://rocket.chat/#rocket-team", "value": "Team" },
+        { "href": "https://rocket.chat/docs", "value": "Docs" },
+        { "href": "https://rocket.chat/blog", "value": "Blog" },
+        { "href": "https://rocket.chat/releases", "value": "Download" },
+        { "href": "https://rocket.chat/contact", "value": "Contact" }
       ],
       "logo": {
         "image": "/images/logo.png",
         "link": {
-          "href": "https://reactioncommerce.com",
-          "value": "Reaction"
+          "href": "https://rocket.chat",
+          "value": "Rocket.Chat"
         }
       },
       "branch": "master"
@@ -39,7 +41,6 @@
     }
   }],
   "redoc": {
-    "schedule": "every 4 hours",
-    "initRepoData": "https://raw.githubusercontent.com/reactioncommerce/redoc/master/private/redoc.json"
+    "schedule": "every 4 hours"
   }
 }

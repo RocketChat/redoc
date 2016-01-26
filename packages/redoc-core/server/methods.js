@@ -102,6 +102,7 @@ Meteor.methods({
       }
       // insert TOC fixtures
       tocData.forEach(function (tocItem) {
+        console.log(tocItem);
         ReDoc.Collections.TOC.insert(tocItem);
       });
     }
@@ -259,7 +260,7 @@ Meteor.methods({
         }
       });
     }
-  }
+  },
 
   /**
    *  redoc/getTOC
@@ -362,7 +363,6 @@ Meteor.methods({
     this.unblock();
     check(repo, String);
     check(branch, String);
-
 
     const docRepo = ReDoc.Collections.Repos.findOne({
       repo: repo
