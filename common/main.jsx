@@ -24,7 +24,10 @@ let clientOptions = {
 let getBasename = function() {
   let el = document.createElement('a');
   el.href = __meteor_runtime_config__.ROOT_URL;
-  return el.pathname + '/';
+  if (el.pathname.substr(-1) !== '/') {
+    return el.pathname + '/';
+  }
+  return el.pathname;
 }
 
 if (Meteor.isClient) {

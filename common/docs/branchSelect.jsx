@@ -5,7 +5,7 @@ export default React.createClass({
   getMeteorData() {
     let branches = [];
     let repo = ReDoc.Collections.Repos.findOne({ repo: this.props.repo });
-    if (repo) {
+    if (repo && repo.branches) {
       branches = repo.branches.map(function(branch) {
         return branch.name;
       })
