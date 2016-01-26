@@ -46,18 +46,19 @@ export default React.createClass({
         <ReactHelmet
           meta={[
             {name: "viewport", content: "width=device-width"},
-            {property: "og:title", content: "Rocket.Chat - The ultimate Open Source web chat platform"},
-            {property: "og:description", content: "From group messages and video calls all the way to helpdesk killer features our goal is to become the number one cross-platform open source chat solution."},
-            {property: "og:url", content: this.data.rootURL},
-            {property: "og:image", content: this.data.rootURL + "images/logo.png"}
+            {property: "og:title", content: Meteor.settings.public.redoc.meta.title},
+            {property: "og:description", content: Meteor.settings.public.redoc.meta.description},
+            {property: "og:url", content: Meteor.settings.public.redoc.meta.url},
+            {property: "og:image", content: Meteor.settings.public.redoc.meta.image}
           ]}
           link={[
-            {rel: "canonical", href: this.data.rootURL},
-            {rel: "icon", href: "/favicon.png", type: "type/png"}
+            {rel: "canonical", href: Meteor.settings.public.redoc.meta.url},
+            {rel: "icon", href: Meteor.settings.public.redoc.meta.favicon, type: "type/png"}
           ]}
           base={{"href": this.data.rootURL}}
-          title={"Rocket.Chat Docs"}
+          title={Meteor.settings.public.redoc.title}
         />
+
         <Header
           history={this.props.history}
           params={this.props.params}

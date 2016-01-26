@@ -3,27 +3,29 @@
  * external endpoints
  */
 
-// SyncedCron.add({
-//   name: "Update Github Stargazers",
-//   schedule: function (parser) {
-//     return parser.text("every 2 hours");
-//   },
-//   job: function () {
-//     return Meteor.call("redoc/getRepoData");
-//   }
-// });
+SyncedCron.add({
+  name: "Update Repo Cache",
+  schedule: function (parser) {
+    let schedule = Meteor.settings.redoc.schedule || "every 1 days";
+    return parser.text(schedule);
+  },
+  job: function () {
+    return Meteor.call("redoc/getRepoData");
+  }
+});
 
-// SyncedCron.add({
-//   name: "Update Docs Every 3 Days",
-//   schedule: function (parser) {
-//     return parser.text("every 3 days");
-//   },
-//   job: function () {
-//     ReDoc.Collections.Docs.remove({});
-//   }
-// });
+SyncedCron.add({
+  name: "Flush Docs Cache",
+  schedule: function (parser) {
+    let schedule = Meteor.settings.redoc.schedule || "every 4 hours";
+    return parser.text(schedule);
+  },
+  job: function () {
+    ReDoc.Collections.Docs.remove({});
+  }
+});
 
-// SyncedCron.start();
+SyncedCron.start();
 
 Meteor.startup(function () {
   // Import settings
@@ -49,6 +51,7 @@ Meteor.startup(function () {
       }
     }
   }
+
   // Initialize Repo data
-  // Meteor.call("redoc/flushData");
+  Meteor.call("redoc/initRepoData");
 });

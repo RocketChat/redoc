@@ -18,7 +18,7 @@ export default React.createClass({
 
   handleBranchSelect(selectedBranch) {
     if (this.props.history) {
-      const branch = selectedBranch || this.props.params.branch || "master";
+      const branch = selectedBranch || this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const params = this.props.params;
       const url = `/${params.repo}/${branch}/${params.alias}`;
 
@@ -36,16 +36,13 @@ export default React.createClass({
     }
   },
 
-  renderMainNavigationLinks() {
-    return [
-      <a className="nav-link" href="https://demo.rocket.chat">{"Demo"}</a>,
-      <a className="nav-link" href="https://rocket.chat/#features">{"Features"}</a>,
-      <a className="nav-link" href="https://rocket.chat/#rocket-team">{"Team"}</a>,
-      <a className="nav-link active" href="https://rocket.chat/docs">{"Docs"}</a>,
-      <a className="nav-link" href="https://rocket.chat/blog">{"Blog"}</a>,
-      <a className="nav-link" href="https://rocket.chat/releases">{"Download"}</a>,
-      <a className="nav-link" href="https://rocket.chat/contact">{"Contact"}</a>
-    ];
+  renderMainNavigationLinks(active) {
+    let links = [];
+    for (link of Meteor.settings.public.redoc.mainNavigationLinks) {
+      let className = (link.href === active || link.value === active) ? "nav-link active" : "nav-link";
+      links.push(<a className={className} href={link.href}>{link.value}</a>);
+    }
+    return links;
   },
 
   render() {
@@ -55,13 +52,13 @@ export default React.createClass({
           <button className="redoc menu-button" onClick={this.handleMenuToggle}>
             <i className="fa fa-bars"></i>
           </button>
-          <a className="title" href="https://rocket.chat">
-            <img className="logo" src="images/logo.png" />
-            {"Rocket.Chat"}
+          <a className="title" href={Meteor.settings.public.redoc.logo.link.href}>
+            <img className="logo" src={Meteor.settings.public.redoc.logo.image} />
+            {Meteor.settings.public.redoc.logo.link.value}
           </a>
         </div>
         <div className="navigation">
-          {this.renderMainNavigationLinks()}
+          {this.renderMainNavigationLinks('Docs')}
         </div>
         <div className="filters">
           <div className="item">

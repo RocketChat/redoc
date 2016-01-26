@@ -38,6 +38,15 @@ export default React.createClass({
     }
   },
 
+  renderMainNavigationLinks(active) {
+    let links = [];
+    for (link of Meteor.settings.public.redoc.mainNavigationLinks) {
+      let className = (link.href === active || link.value === active) ? "nav-link active" : "nav-link";
+      links.push(<li className="reaction-nav-item"><a className={className} href={link.href}>{link.value}</a></li>);
+    }
+    return links;
+  },
+
   renderMenu: function(parentPath) {
     let self = this;
     let items = [];
@@ -45,6 +54,9 @@ export default React.createClass({
     if (parentItems.length === 0) {
       return [];
     }
+    const items = this.data.docs.map((item) => {
+      const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
+      const url = `/${item.repo}/${branch}/${item.alias}`;
 
     const className = parentPath ? 'guide-sub-nav-item' : 'guide-nav-item';
     for (let item of parentItems) {
@@ -74,17 +86,10 @@ export default React.createClass({
             <div className="menu">
               <ul>
                 <li className="reaction-nav-item primary">
-                  <img className="logo" src="images/logo.png" />
-                  <a className="nav-link" href="https://rocket.chat"> {"Rocket.Chat"} </a>
+                  <img className="logo" src={Meteor.settings.public.redoc.logo.image} />
+                  <a className="nav-link" href={Meteor.settings.public.redoc.logo.link.href}>{Meteor.settings.public.redoc.logo.link.value}</a>
                 </li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://demo.rocket.chat">{"Demo"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/#features">{"Features"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/#rocket-team">{"Team"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link active" href="https://rocket.chat/docs">{"Docs"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/blog">{"Blog"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/releases">{"Download"}</a></li>
-                <li className="reaction-nav-item"><a className="nav-link" href="https://rocket.chat/contact">{"Contact"}</a></li>
-
+                {this.renderMainNavigationLinks('Docs')}
                 {this.renderMenu()}
               </ul>
             </div>
