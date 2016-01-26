@@ -102,7 +102,6 @@ Meteor.methods({
       }
       // insert TOC fixtures
       tocData.forEach(function (tocItem) {
-        console.log(tocItem);
         ReDoc.Collections.TOC.insert(tocItem);
       });
     }

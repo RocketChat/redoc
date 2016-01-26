@@ -55,7 +55,6 @@ export default React.createClass({
       return [];
     }
     const className = parentPath ? 'guide-sub-nav-item' : 'guide-nav-item';
-    console.log(parentItems);
     for (let item of parentItems) {
       const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const url = `/${item.repo}/${branch}/${item.alias}`;

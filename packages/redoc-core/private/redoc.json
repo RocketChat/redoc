@@ -13,5 +13,21 @@
     "branch": "master",
     "docPath": "README.md",
     "default": true
+  },
+  {
+    "class": "guide-nav-item",
+    "alias": "basic",
+    "label": "Basic",
+    "repo": "Rocket.Chat.Docs",
+    "branch": "master",
+    "docPath": "Basic/README.md"
+  },
+  {
+    "class": "guide-sub-nav-item",
+    "alias": "basic-contributing",
+    "label": "Contributing",
+    "repo": "Rocket.Chat.Docs",
+    "branch": "master",
+    "docPath": "Basic/CONTRIBUTING.md"
   }]
 }

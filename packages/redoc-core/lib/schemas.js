@@ -57,6 +57,10 @@ ReDoc.Collections.Repos.attachSchema(ReDoc.Schemas.Repos);
 // Table of Contents
 //
 ReDoc.Schemas.TOC = new SimpleSchema({
+  class: {
+    type: String,
+    optional: true
+  },
   alias: {
     type: String
   },

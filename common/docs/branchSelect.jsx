@@ -23,7 +23,7 @@ export default React.createClass({
 
   renderBranches() {
     return this.data.branches.map(function(branch) {
-      return <option value={branch}>{branch}</option>
+      return <option key={branch} value={branch}>{branch}</option>
     });
   },
 
