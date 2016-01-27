@@ -9,10 +9,12 @@ Meteor.startup(function() {
 
 	Api.addRoute('updateDocs', { authRequired: false }, {
 		post: function() {
-			if (this.bodyParams && this.bodyParams.hook && this.bodyParams.hook.config && Meteor.settings.services && Meteor.settings.services.github && Meteor.settings.services.github.webhook && this.bodyParams.hook.config.secret === Meteor.settings.services.github.webhook.updateDocs) {
+			if (this.bodyParams && this.bodyParams.hook && this.bodyParams.hook.config && webHookUpdateDocs && this.bodyParams.hook.config.secret === webHookUpdateDocs) {
 				let repo = this.bodyParams.repository.name;
 				Meteor.call('redoc/getRepoData', repo);
 				return { success: true };
+			} else {
+				return { success: false };
 			}
 		}
 	});

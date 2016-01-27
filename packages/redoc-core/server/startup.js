@@ -45,6 +45,7 @@ Meteor.startup(function () {
           // some an auth param string for api requests
           if (service === "github") {
             global.authString = `?client_id=${settings.clientId}&client_secret=${settings.secret}`;
+            global.webHookUpdateDocs = settings.webhook ? settings.webhook.updateDocs : '';
           }
           console.log("service configuration loaded: " + service);
         }
