@@ -74,7 +74,6 @@ Meteor.publish("CacheDocs", function (params) {
   // return cache doc
   return ReDoc.Collections.Docs.find({
     repo: params.repo,
-    branch: params.branch,
-    alias: params.alias
+    branch: params.branch
   });
 });

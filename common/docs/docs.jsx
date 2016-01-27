@@ -64,29 +64,21 @@ export default React.createClass({
     }
 
     // Render standard content
-    if (this.data.docIsLoaded) {
-      if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
-        let content = {
-          __html: this.data.currentDoc.docPageContentHTML
-        };
-
-        return (
-          <div className="content-html" dangerouslySetInnerHTML={content}></div>
-        );
-      }
+    if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
+      let content = {
+        __html: this.data.currentDoc.docPageContentHTML
+      };
 
       return (
-        <div className="content-html">
-          <h2>Requested document not found for this version.</h2>
-        </div>
-      );
-    } else {
-      return (
-        <div className="loading">
-          <h2>Loading....</h2>
-        </div>
+        <div className="content-html" dangerouslySetInnerHTML={content}></div>
       );
     }
+
+    return (
+      <div className="content-html">
+        <h2>Requested document not found for this version.</h2>
+      </div>
+    );
   },
 
   render() {
