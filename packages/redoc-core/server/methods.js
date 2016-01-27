@@ -173,7 +173,6 @@ Meteor.methods({
               "User-Agent": "ReDoc/1.0"
             }
           });
-          // get branches data
           if (repoData && branchesData) {
             ReDoc.Collections.Repos.upsert({
               _id: repo._id
@@ -187,11 +186,12 @@ Meteor.methods({
                 apiUrl: apiUrl || repoData.data.url,
                 rawUrl: rawUrl,
                 release: releaseData.data,
-                contentsUrl: repoData.data.contents_url,
                 branches: branchesData.data,
-                defaultBranch: repoData.data.default_branch
+                defaultBranch: repoData.data.default_branch,
+                contentsUrl: repoData.data.contents_url
               }
             });
+
             // populate docset
             Meteor.call("redoc/getDocSet", repo.repo);
             // Meteor.call("redoc/getRepoTOC", repo.repo);

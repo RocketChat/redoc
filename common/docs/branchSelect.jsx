@@ -4,7 +4,7 @@ export default React.createClass({
 
   getMeteorData() {
     let branches = [];
-    let repo = ReDoc.Collections.Repos.findOne({ repo: this.props.repo });
+    let repo = ReDoc.Collections.Repos.findOne({ repo: this.props.repo }) || ReDoc.Collections.Repos.findOne();
     if (repo && repo.branches) {
       branches = repo.branches.map(function(branch) {
         return branch.name;
@@ -28,19 +28,25 @@ export default React.createClass({
   },
 
   render() {
-    return (
-      <div className="redoc control select">
-        <select
-          onChange={this.handleChange}
-          ref="select"
-          value={this.props.currentBranch}
-        >
-          {this.renderBranches()}
-        </select>
-        <div className="icon right">
-          <i className="fa fa-angle-down"></i>
+    if (this.data.branches.length > 0) {
+      return (
+        <div className="redoc control select">
+          <select
+            onChange={this.handleChange}
+            ref="select"
+            value={this.props.currentBranch}
+          >
+            {this.renderBranches()}
+          </select>
+          <div className="icon right">
+            <i className="fa fa-angle-down"></i>
+          </div>
         </div>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="loading">Loading...</div>
+      );
+    }
   }
 });

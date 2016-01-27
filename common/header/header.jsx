@@ -64,7 +64,7 @@ export default React.createClass({
           <div className="item">
             <BranchSelect
               repo={this.props.params.repo}
-              currentBranch={this.props.params.branch}
+              currentBranch={this.props.params.branch || Meteor.settings.public.redoc.branch || "master"}
               onBranchSelect={this.handleBranchSelect}
             />
           </div>

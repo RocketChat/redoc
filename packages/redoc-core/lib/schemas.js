@@ -48,6 +48,10 @@ ReDoc.Schemas.Repos = new SimpleSchema({
   contentsUrl: {
     type: String,
     optional: true
+  },
+  defaultBranch: {
+    type: String,
+    optional: true
   }
 });
 
