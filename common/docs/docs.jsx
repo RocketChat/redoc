@@ -17,7 +17,7 @@ export default React.createClass({
       });
       let params = this.props.params;
       if (Object.keys(params).length === 0) {
-        let defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
+        let defaultDoc = ReDoc.Collections.TOC.findOne({ default: true });
         if (!!defaultDoc) {
           params.repo = defaultDoc.repo;
           params.branch = defaultDoc.branch;
@@ -74,11 +74,19 @@ export default React.createClass({
       );
     }
 
-    return (
-      <div className="content-html">
-        <h2>Requested document not found for this version.</h2>
-      </div>
-    );
+    if (!!this.data.docIsLoaded) {
+      return (
+        <div className="content-html">
+          <h2>Requested document not found for this version.</h2>
+        </div>
+      );
+    } else {
+      return (
+        <div className="content-html">
+          <h2>Loading...</h2>
+        </div>
+      );
+    }
   },
 
   render() {
