@@ -81,7 +81,7 @@ Meteor.methods({
     let existingRepos = ReDoc.Collections.Repos.find();
     if (existingRepos.count() === 0) {
       let Repos = initRepoData.repos;
-      // if no tocData has been defined, we'll show this projects docs
+      // if no repos has been defined, we'll show this projects docs
       if (!Repos) {
         throw new Meteor.Error("No repos have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json");
       }
@@ -91,23 +91,24 @@ Meteor.methods({
       });
     }
 
-    // @TODO: populate TOC from GITHUB
     // populate TOC from settings
     let TOC = ReDoc.Collections.TOC.find();
-    if (TOC.count() === 0) {
-      let tocData = initRepoData.tocData;
-      // if no tocData has been defined, we'll show this projects docs
-      if (!tocData) {
-        throw new Meteor.Error("No tocData have been defined in Meteor.settings.redoc.initRepoData url or object neither in private/redoc.json");
-      }
+    if (TOC.count() === 0 && initRepoData.tocData) {
       // insert TOC fixtures
-      tocData.forEach(function (tocItem) {
+      initRepoData.tocData.forEach(function (tocItem) {
         ReDoc.Collections.TOC.insert(tocItem);
       });
     }
 
     // Run once will get all repo data for current repos
     Meteor.call("redoc/getRepoData");
+
+    // If TOC is still empty, get TOC from Repository
+    if (ReDoc.Collections.TOC.find().count() === 0) {
+      ReDoc.Collections.Repos.find().forEach(function(repo) {
+        Meteor.call("redoc/getRepoTOC", repo.repo, repo.defaultBranch);
+      })
+    }
   },
 
   /**
@@ -132,9 +133,15 @@ Meteor.methods({
    *  @param {Boolean} option - if true we'll flush the existing repo records first
    *  @returns {undefined} returns
    */
-  "redoc/getRepoData": function () {
+  "redoc/getRepoData": function (repo) {
     this.unblock();
-    let repos = ReDoc.Collections.Repos.find().fetch();
+
+    let repos;
+    if (repo !== undefined) {
+       repos = ReDoc.Collections.Repos.find({ repo: repo }).fetch();
+    } else {
+      repos = ReDoc.Collections.Repos.find().fetch();
+    }
 
     // gather multiple repo gh profiles
     for (let repo of repos) {
@@ -187,7 +194,7 @@ Meteor.methods({
             });
             // populate docset
             Meteor.call("redoc/getDocSet", repo.repo);
-            // Meteor.call("redoc/getTOC", repo.repo);
+            // Meteor.call("redoc/getRepoTOC", repo.repo);
           }
         }
       }
@@ -262,14 +269,14 @@ Meteor.methods({
   },
 
   /**
-   *  redoc/getTOC
+   *  redoc/getRepoTOC
    *  fetch all docs for a specified repo / branch starting at path
    *  @param {String} repo - repo
    *  @param {String} fetchBranch - optional branch
    *  @param {String} path - optional path
    *  @returns {undefined} returns
    */
-  "redoc/getTOC": function (repo, fetchBranch, path) {
+  "redoc/getRepoTOC": function (repo, fetchBranch, path) {
     this.unblock();
     check(repo, String);
     check(fetchBranch,  Match.Optional(String, null));
@@ -282,16 +289,16 @@ Meteor.methods({
 
     // we need to have a repo
     if (!docRepo) {
-      console.log(`redoc/getTOC: Failed to load repo data for ${repo}`);
+      console.log(`redoc/getRepoTOC: Failed to load repo data for ${repo}`);
       return false;
     }
 
     let branch;
     if (fetchBranch) {
       branch = fetchBranch;
-    } else if (docRepo.branches.length > 0) {
+    } else if (docRepo.branches && docRepo.branches.length > 0) {
       for (let branch of docRepo.branches) {
-        Meteor.call("redoc/getTOC", repo, branch.name, path);
+        Meteor.call("redoc/getRepoTOC", repo, branch.name, path);
       }
     } else {
       branch = docRepo.defaultBranch || "master";
@@ -344,69 +351,10 @@ Meteor.methods({
           }
           ReDoc.Collections.TOC.insert(tocData);
           if (tocItem.type === 'dir') {
-            Meteor.call("redoc/getTOC", repo, branch, tocItem.path);
+            Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path);
           }
         }
       }
-    }
-  },
-
-  /**
-   *  redoc/getDocs
-   *  fetch all docs from TOC
-   *  @param {String} repo - repo
-   *  @param {String} branch - branch
-   *  @returns {undefined} returns
-   */
-  "redoc/getDocsFromTOC": function (repo, branch) {
-    this.unblock();
-    check(repo, String);
-    check(branch, String);
-
-    const docRepo = ReDoc.Collections.Repos.findOne({
-      repo: repo
-    });
-
-    const docTOC = ReDoc.Collections.TOC.find({
-      repo: repo,
-      branch: branch
-    }).fetch();
-
-    for (let tocItem of docTOC) {
-      let docSourceUrl = `${docRepo.rawUrl}/${branch}/${tocItem.docPath}`;
-      // lets fetch that Github repo
-      Meteor.http.get(docSourceUrl, function (error, result) {
-        if (error) return error;
-        if (result.statusCode === 200) {
-          // sensible defaults for every repo
-          let docSet = ReDoc.getPathParams(docSourceUrl);
-          docSet.docPage = docSourceUrl;
-          docSet.docPath = tocItem.docPath;
-
-          // if TOC has different alias, we'll use that
-          if (tocItem.alias) {
-            docSet.alias = tocItem.alias;
-          }
-
-          // pre-process documentation
-          if (!result.content) {
-            console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);
-            result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
-          }
-          docSet.docPageContent = result.content;
-          docSet.docPageContentHTML = md.render(result.content, {
-            rawUrl: docRepo.rawUrl,
-            branch: branch
-          });
-
-          // insert new documentation into Cache
-          return ReDoc.Collections.Docs.upsert({
-            docPage: docSourceUrl
-          }, {
-            $set: docSet
-          });
-        }
-      });
     }
   }
 });
