@@ -9,8 +9,7 @@ Meteor.startup(function() {
 
 	Api.addRoute('updateDocs', { authRequired: false }, {
 		post: function() {
-			console.log(webHookUpdateDocs, this.request, this.bodyParams, CryptoJS.HmacSHA1(this.bodyParams, webHookUpdateDocs).toString());
-			if (this.request && this.request.headers && this.request.headers['X-Hub-Signature'] === CryptoJS.HmacSHA1(this.bodyParams, webHookUpdateDocs).toString()) {
+			if (this.request && this.request.headers && this.request.headers['X-Hub-Signature'] === CryptoJS.HmacSHA1(JSON.stringify(this.bodyParams), webHookUpdateDocs).toString()) {
 				let repo = this.bodyParams.repository.name;
 				Meteor.call('redoc/getRepoData', repo);
 				return { success: true };
