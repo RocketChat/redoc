@@ -49,3 +49,7 @@ reactioncommerce:redoc-gitter
 aldeed:collection2
 ongoworks:security
 nimble:restivus
+
+# CryptoJS
+jparker:crypto-hmac
+jparker:crypto-sha1
