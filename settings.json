@@ -12,7 +12,7 @@
         "title": "Rocket.Chat - The ultimate Open Source web chat platform",
         "description": "From group messages and video calls all the way to helpdesk killer features our goal is to become the number one cross-platform open source chat solution.",
         "url": "https://rocket.chat/docs",
-        "image": "https://rocket.chat/images/logo.png",
+        "image": "https://rocket.chat/docs/images/logo.png",
         "favicon": "/favicon.png"
       },
       "mainNavigationLinks": [
@@ -25,7 +25,7 @@
         { "href": "https://rocket.chat/contact", "value": "Contact" }
       ],
       "logo": {
-        "image": "/images/logo.png",
+        "image": "images/logo.png",
         "link": {
           "href": "https://rocket.chat",
           "value": "Rocket.Chat"
