@@ -118,6 +118,7 @@ Meteor.methods({
    *  @returns {undefined} returns
    */
   "redoc/flushDocCache": function (flushRepos) {
+    check(flushRepos, Match.Optional(Boolean, null));
     if (flushRepos) {
       ReDoc.Collections.Repos.remove({});
     }
@@ -134,6 +135,7 @@ Meteor.methods({
    *  @returns {undefined} returns
    */
   "redoc/getRepoData": function (repo) {
+    check(repo, Match.Optional(String, null));
     this.unblock();
 
     let repos;
