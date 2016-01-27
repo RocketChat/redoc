@@ -69,7 +69,8 @@ Meteor.publish("CacheDocs", function (params) {
 
   // check if we need to fetch new docs
   if (cacheDoc.count() === 0 && docTOC) {
-    Meteor.call("redoc/getDocSet", params.repo, params.branch);
+    console.log("CacheDocs Publication: Fetch not found document", params);
+    Meteor.call("redoc/getDocSet", params.repo, params.branch, params.alias);
   }
   // return cache doc
   return ReDoc.Collections.Docs.find({

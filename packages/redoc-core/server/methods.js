@@ -205,11 +205,13 @@ Meteor.methods({
    *  fetch all docs for a specified repo / branch
    *  @param {String} repo - repo
    *  @param {String} fetchBranch - optional branch
+   *  @param {String} alias - optional specific alias to fetch
    *  @returns {undefined} returns
    */
-  "redoc/getDocSet": function (repo, fetchBranch) {
+  "redoc/getDocSet": function (repo, fetchBranch, alias) {
     check(repo, String);
     check(fetchBranch, Match.Optional(String, null));
+    check(alias, Match.Optional(String, null));
     // get repo details
     const docRepo = ReDoc.Collections.Repos.findOne({
       repo: repo
@@ -223,13 +225,21 @@ Meteor.methods({
 
     const branch = fetchBranch || docRepo.defaultBranch || Meteor.settings.public.redoc.branch || "master";
 
+    query = {
+      repo: repo,
+      branch: branch
+    };
+
+    if (alias !== undefined) {
+      query.alias = alias;
+    }
+
     // assemble TOC
-    let docTOC = ReDoc.Collections.TOC.find({
-      repo: repo
-    }).fetch();
+    let docTOC = ReDoc.Collections.TOC.find(query).fetch();
 
     for (let tocItem of docTOC) {
       let docSourceUrl = `${docRepo.rawUrl}/${branch}/${tocItem.docPath}`;
+      console.log(docSourceUrl);
       // lets fetch that Github repo
       Meteor.http.get(docSourceUrl, function (error, result) {
         if (error) return error;
@@ -329,8 +339,8 @@ Meteor.methods({
             sort = parseInt(sortIndex);
           }
           let tocData = {
-            alias: s.slugify(s.strLeftBack(tocItem.path, '.md')),
-            label: s.strLeftBack(tocItem.name, '.md'),
+            alias: s.slugify(s.strLeftBack(tocItem.path, '.md').replace(/^(\d+)[ \.]+/, '')),
+            label: s.strLeftBack(tocItem.name, '.md').replace(/^(\d+)[ \.]+/, ''),
             repo: repo,
             branch: branch,
             sort: sort,
@@ -356,5 +366,6 @@ Meteor.methods({
         }
       }
     }
+    Meteor.call("redoc/getRepoData");
   }
 });
