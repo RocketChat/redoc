@@ -194,7 +194,6 @@ Meteor.methods({
 
             // populate docset
             Meteor.call("redoc/getDocSet", repo.repo);
-            // Meteor.call("redoc/getRepoTOC", repo.repo);
           }
         }
       }
@@ -211,7 +210,6 @@ Meteor.methods({
   "redoc/getDocSet": function (repo, fetchBranch) {
     check(repo, String);
     check(fetchBranch, Match.Optional(String, null));
-    const branch = fetchBranch || "development";
     // get repo details
     const docRepo = ReDoc.Collections.Repos.findOne({
       repo: repo
@@ -222,6 +220,8 @@ Meteor.methods({
       console.log(`redoc/getDocSet: Failed to load repo data for ${repo}`);
       return false;
     }
+
+    const branch = fetchBranch || docRepo.defaultBranch || Meteor.settings.public.redoc.branch || "master";
 
     // assemble TOC
     let docTOC = ReDoc.Collections.TOC.find({

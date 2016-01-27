@@ -18,9 +18,11 @@ export default React.createClass({
       let params = this.props.params;
       if (Object.keys(params).length === 0) {
         let defaultDoc = ReDoc.Collections.TOC.findOne({ default: true }) || ReDoc.Collections.TOC.findOne();
-        params.repo = defaultDoc.repo;
-        params.branch = defaultDoc.branch;
-        params.alias = defaultDoc.alias;
+        if (!!defaultDoc) {
+          params.repo = defaultDoc.repo;
+          params.branch = defaultDoc.branch;
+          params.alias = defaultDoc.alias;
+        }
       }
       return {
         docIsLoaded: sub.ready(),
@@ -49,21 +51,6 @@ export default React.createClass({
     }
   },
 
-  renderMenu() {
-    const items = this.data.docs.map((item) => {
-      const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
-      const url = `/${item.repo}/${branch}/${item.alias}`;
-
-      return (
-        <li className={item.class}>
-          <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
-        </li>
-      );
-    });
-
-    return items;
-  },
-
   renderContent() {
     if (Meteor.isClient && DocSearch.getCurrentQuery()) {
       if (DocSearch.getCurrentQuery().length > 0) {
@@ -77,21 +64,29 @@ export default React.createClass({
     }
 
     // Render standard content
-    if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
-      let content = {
-        __html: this.data.currentDoc.docPageContentHTML
-      };
+    if (this.data.docIsLoaded) {
+      if (this.data.currentDoc && this.data.currentDoc.docPageContentHTML) {
+        let content = {
+          __html: this.data.currentDoc.docPageContentHTML
+        };
+
+        return (
+          <div className="content-html" dangerouslySetInnerHTML={content}></div>
+        );
+      }
 
       return (
-        <div className="content-html" dangerouslySetInnerHTML={content}></div>
+        <div className="content-html">
+          <h2>Requested document not found for this version.</h2>
+        </div>
+      );
+    } else {
+      return (
+        <div className="loading">
+          <h2>Loading....</h2>
+        </div>
       );
     }
-
-    return (
-      <div className="content-html">
-        <h2>Requested document not found for this version.</h2>
-      </div>
-    );
   },
 
   render() {
