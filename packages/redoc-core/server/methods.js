@@ -256,6 +256,18 @@ Meteor.methods({
             docSet.alias = tocItem.alias;
           }
 
+          // if TOC has different label, we'll use that
+          if (!!tocItem.label) {
+            let label = tocItem.label;
+            if (!!tocItem.parentPath) {
+              parent = ReDoc.Collections.TOC.findOne({ docPath: tocItem.parentPath + "/README.md" });
+              if (!!parent) {
+                label = parent.label + " - " + label;
+              }
+            }
+            docSet.label = label;
+          }
+
           // pre-process documentation
           if (!result.content) {
             console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);

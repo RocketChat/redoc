@@ -96,7 +96,7 @@ export default React.createClass({
       label = this.data.currentDoc.label;
     }
 
-    const pageTitle = `${Meteor.settings.public.redoc.title} - ${label}`;
+    const pageTitle = `${Meteor.settings.public.redoc.title} - ${decodeURIComponent(label)}`;
 
     return (
       <div className="redoc docs">
