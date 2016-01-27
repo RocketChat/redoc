@@ -12,7 +12,7 @@ Meteor.startup(function() {
 			if (this.request && this.request.headers && this.request.headers['x-hub-signature'] === "sha1=" + CryptoJS.HmacSHA1(JSON.stringify(this.bodyParams), webHookUpdateDocs).toString()) {
 				let repo = this.bodyParams.repository.name;
 				let branch = this.bodyParams.refs.split('/').splice(-1)[0];
-				Meteor.call('redoc/getRepoTOC', repo, branch);
+				Meteor.call('redoc/flushDocCache');
 				return { success: true };
 			} else {
 				return { success: false };
