@@ -8,6 +8,7 @@ const {Route, IndexRoute} = ReactRouter;
 const AppRoutes = (
   <Route component={Layout} path="/">
     <Route component={Docs} path="/:repo/:branch/:alias" />
+		<Route component={Docs} path="/:branch/:alias" />
     <IndexRoute component={Docs} />
   </Route>
 );

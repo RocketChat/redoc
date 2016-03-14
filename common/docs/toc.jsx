@@ -57,7 +57,14 @@ export default React.createClass({
     for (let item of parentItems) {
       const className = item.class || (parentPath ? 'guide-sub-nav-item' : 'guide-nav-item');
       const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
-      const url = `/${item.repo}/${branch}/${item.alias}`;
+			let url = '';
+
+			if (Meteor.settings.public.redoc.repoInLinks) {
+				url = `/${item.repo}/${branch}/${item.alias}`;
+			} else {
+				url = `/${branch}/${item.alias}`;
+			}
+
       items.push (
         <li key={"guide-nav-item-" + url} className={className}>
           <a href={url} onClick={this.handleDocNavigation}>{item.label}</a>
