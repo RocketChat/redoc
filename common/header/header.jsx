@@ -55,11 +55,6 @@ export default DocView = React.createClass({
   render() {
     return (
       <div className="redoc header">
-
-        <div className="navigation">
-          {this.renderMainNavigationLinks('Docs')}
-        </div>
-
         <div className="main-header">
           <div className="brand">
             <button className="redoc menu-button" onClick={this.handleMenuToggle}>
@@ -70,7 +65,9 @@ export default DocView = React.createClass({
               {Meteor.settings.public.redoc.logo.link.value}
             </a>
           </div>
-
+          <div className="navigation">
+            {this.renderMainNavigationLinks('Docs')}
+          </div>
           <div className="filters">
             <div className="item">
               <BranchSelect
