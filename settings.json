@@ -25,7 +25,7 @@
         { "href": "https://rocket.chat/contact", "value": "Contact" }
       ],
       "logo": {
-        "image": "images/logo.png",
+        "image": "/images/logo.png",
         "link": {
           "href": "https://rocket.chat",
           "value": "Rocket.Chat"
