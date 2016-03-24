@@ -93,7 +93,6 @@ const DocView = React.createClass({
           <div className="navigation">
             {this.renderMainNavigationLinks('Docs')}
           </div>
-          <div className="filters">
           <div className="navbar-item filters">
             <div className="item">
               <BranchSelect
