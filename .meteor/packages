@@ -40,7 +40,6 @@ react-meteor-data
 reactioncommerce:redoc-core
 reactioncommerce:redoc-base-theme
 reactioncommerce:redoc-default-theme
-reactioncommerce:redoc-gitter
 
 # ReDoc admin
 aldeed:collection2
