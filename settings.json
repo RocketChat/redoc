@@ -13,7 +13,7 @@
         "description": "From group messages and video calls all the way to helpdesk killer features our goal is to become the number one cross-platform open source chat solution.",
         "url": "https://rocket.chat/docs",
         "image": "https://rocket.chat/docs/images/logo.png",
-        "favicon": "/favicon.png"
+        "favicon": "https://rocket.chat/docs/favicon.png"
       },
       "mainNavigationLinks": [
         { "href": "https://rocket.chat/live-demo", "value": "Demo" },
@@ -25,7 +25,7 @@
         { "href": "https://rocket.chat/contact", "value": "Contact" }
       ],
       "logo": {
-        "image": "/images/logo.png",
+        "image": "https://rocket.chat/docs/images/logo.png",
         "link": {
           "href": "https://rocket.chat",
           "value": "Rocket.Chat"
