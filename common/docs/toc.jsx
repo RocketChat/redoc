@@ -70,9 +70,9 @@ export default DocView = React.createClass({
       let url = '';
 
       if (Meteor.settings.public.redoc.repoInLinks) {
-        url = `/${item.repo}/${branch}/${item.alias}`;
+        url += `${global.baseURL}/${item.repo}/${branch}/${item.alias}`;
       } else {
-        url = `/${branch}/${item.alias}`;
+        url += `${global.baseURL}/${branch}/${item.alias}`;
       }
 
       let subList;
@@ -116,7 +116,7 @@ export default DocView = React.createClass({
   render() {
     const classes = classnames({
       redoc: true,
-      navigation: true,
+      sidebar: true,
       visible: this.data.isMenuVisible
     });
 

@@ -2,6 +2,16 @@
 //   return ReDoc.Collections.Docs.find();
 // });
 
+Meteor.publish("userData", function () {
+  return Meteor.users.find({
+    _id: this.userId
+  }, {
+    fields: {
+      "services.github.id": 1
+    }
+  });
+});
+
 Meteor.publish("TOC", function () {
   return ReDoc.Collections.TOC.find({}, {
     sort: {
@@ -19,6 +29,7 @@ Meteor.publish("Repos", function () {
  *  checks if request docs exists first then pulls new data if there is none
  */
 Meteor.publish("CacheDocs", function (params) {
+
   // some minor validation
   check(params, {
     repo: Match.Optional(String, null),
@@ -50,6 +61,10 @@ Meteor.publish("CacheDocs", function (params) {
 
   if (!params.repo) {
     params.repo = docRepo.repo;
+  }
+
+  if (!params.branch) {
+    params.branch = docRepo.default_branch || Meteor.settings.public.redoc.branch || "master";
   }
 
   // assemble TOC
