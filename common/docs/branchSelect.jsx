@@ -58,4 +58,5 @@ export default BranchSelect = React.createClass({
         </div>
       </div>
     );
+  }
 });
