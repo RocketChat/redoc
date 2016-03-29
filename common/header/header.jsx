@@ -28,11 +28,16 @@ const DocView = React.createClass({
 
   handleBranchSelect(selectedBranch) {
     if (this.context.router) {
-      const branch = selectedBranch || this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const params = this.props.params;
       const repo = params.repo || this.data.defaultDoc.repo;
+      const branch = selectedBranch || this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
       const alias = params.alias || this.data.defaultDoc.alias;
-      const url = `/${repo}/${branch}/${alias}`;
+      let url = '';
+      if (Meteor.settings.public.redoc.repoInLinks) {
+        url += `${global.baseURL}/${repo}/${branch}/${params.alias}`;
+      } else {
+        url += `${global.baseURL}/${branch}/${params.alias}`;
+      }
 
       window.location.href = url;
     }
@@ -75,11 +80,6 @@ const DocView = React.createClass({
   render() {
     return (
       <div className="redoc header">
-
-        <div className="navigation">
-          {this.renderMainNavigationLinks("Docs")}
-        </div>
-
         <div className="main-header">
           <div className="navbar-item brand">
             <button className="redoc menu-button" onClick={this.handleMenuToggle}>
@@ -90,7 +90,9 @@ const DocView = React.createClass({
               {Meteor.settings.public.redoc.logo.link.value}
             </a>
           </div>
-
+          <div className="navigation">
+            {this.renderMainNavigationLinks('Docs')}
+          </div>
           <div className="navbar-item filters">
             <div className="item">
               <BranchSelect
