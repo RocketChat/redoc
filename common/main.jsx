@@ -11,6 +11,7 @@ import url from 'url';
 
 const analytics = analytics || null;
 
+const baseURL = s.rtrim(url.parse(__meteor_runtime_config__.ROOT_URL).pathname, '/') || '';
 const AppRoutes = (
   <Route component={Layout} path="/">
     <Route component={Docs} path={baseURL} />
