@@ -39,14 +39,14 @@ md = require("markdown-it")({
     if (!isImage && !hasProtocol) {
       switch (link.charAt(0)) {
       case "#":
-        newLink = `/${env.repo}/${env.branch}/${env.alias}${link}`;
+        newLink = `${global.baseURL}` + (Meteor.settings.public.redoc.repoInLinks ? `/${env.repo}` : '') + `/${env.branch}/${env.alias}${link}`;
         break;
       case "/":
         tocItem = ReDoc.Collections.TOC.findOne({
           docPath: link.substring(1)
         });
         if (tocItem) {
-          newLink = `/${tocItem.repo}/${env.branch}/${tocItem.alias}`;
+          newLink = `${global.baseURL}` + (Meteor.settings.public.redoc.repoInLinks ? `/${tocItem.repo}` : '') + `/${env.branch}/${tocItem.alias}`;
         }
         break;
       default:
