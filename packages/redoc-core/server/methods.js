@@ -365,7 +365,7 @@ Meteor.methods({
           // pre-process documentation
           if (!result.content) {
             console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);
-            result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
+            result.content = `# ${docSet.labell || tocItem.label || ''}` // `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
           }
 
           docSet.docPageContent = result.content;
@@ -395,11 +395,12 @@ Meteor.methods({
  *  @param {String} path - optional path
  *  @returns {undefined} returns
  **/
-  "redoc/getRepoTOC": function (repo, fetchBranch, path) {
+  "redoc/getRepoTOC": function (repo, fetchBranch, path, level) {
     this.unblock();
     check(repo, String);
     check(fetchBranch,  Match.Optional(String, null));
-    check(path,  Match.Optional(String, null));
+    check(path, Match.Optional(String, null));
+    check(level, Match.Optional(Number, null));
 
     // get repo details
     const docRepo = ReDoc.Collections.Repos.findOne({
@@ -463,14 +464,20 @@ Meteor.methods({
             tocData.default = true;
           }
           if (path) {
+            tocData.class = tocItem.type === 'dir' ? 'guide-nav-item' : 'guide-sub-nav-item';
             tocData.parentPath = encodeURIComponent(path);
+          } else {
+            tocData.class = 'guide-nav-item';
+          }
+          if (level > 1) {
+            tocData.class += ' level-' + level;
           }
           if (tocItem.type === 'dir') {
             tocData.docPath += '/README.md';
           }
           ReDoc.Collections.TOC.insert(tocData);
           if (tocItem.type === 'dir') {
-            Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path);
+            Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path, (level || 1) + 1);
           }
         }
       }
