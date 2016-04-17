@@ -3,6 +3,7 @@
     "org": "RocketChat",
     "repo": "Rocket.Chat.Docs",
     "label": "Rocket.Chat Docs",
-    "description": "Rocket.Chat Documentation"
+    "description": "Rocket.Chat Documentation",
+    "docPath": "README.md"
   }]
 }

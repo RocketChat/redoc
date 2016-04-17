@@ -46,7 +46,7 @@ md = require("markdown-it")({
           docPath: link.substring(1)
         });
         if (tocItem) {
-          newLink = `${global.baseURL}/${item.slug}`;
+          newLink = `${global.baseURL}/${tocItem.slug}`;
         }
         break;
       default:
