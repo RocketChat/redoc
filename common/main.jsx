@@ -13,15 +13,9 @@ const analytics = analytics || null;
 
 const baseURL = s.rtrim(url.parse(__meteor_runtime_config__.ROOT_URL).pathname, '/') || '';
 const AppRoutes = (
-  <Route component={Layout} path="/">
+  <Route component={Layout} path="*">
     <Route component={RedocAdmin} path="/redoc" />
-    <Route component={Docs} path={baseURL} />
-    <Route component={Docs} path="/:alias" />
-    <Route component={Docs} path={`${baseURL}/:alias`} />
-    <Route component={Docs} path="/:branch/:alias" />
-    <Route component={Docs} path={`${baseURL}/:branch/:alias`} />
-    <Route component={Docs} path="/:repo/:branch/:alias" />
-    <Route component={Docs} path={`${baseURL}/:repo/:branch/:alias`} />
+    <Route component={Docs} path={`${baseURL}/:slug`} />
     <IndexRoute component={Docs} />
   </Route>
 );
