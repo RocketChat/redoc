@@ -102,6 +102,10 @@ ReDoc.Schemas.TOC = new SimpleSchema({
     type: String,
     optional: true
   },
+  slug: {
+    type: String,
+    optional: true
+  },
   documentTOC: {
     type: [ReDoc.Schemas.DocumentTOC],
     optional: true
@@ -155,6 +159,10 @@ ReDoc.Schemas.Docs = new SimpleSchema({
   },
   docPath: {
     type: String
+  },
+  slug: {
+    type: String,
+    optional: true
   },
   docParsed: {
     type: [Object],

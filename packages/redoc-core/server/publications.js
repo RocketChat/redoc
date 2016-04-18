@@ -31,17 +31,24 @@ Meteor.publish("Repos", function () {
 Meteor.publish("CacheDocs", function (docParams) {
   // some minor validation
   check(docParams, {
-    repo: Match.Optional(String, null),
-    branch: Match.Optional(String, null),
-    alias: Match.Optional(String, null)
+    splat: Match.Optional(String, null)
   });
+
+  const baseURL = global.baseURL ? global.baseURL.substring(1) : null;
 
   let params = {};
 
   // Set params defaults
-  params.repo = docParams.repo;
-  params.alias = docParams.alias;
   params.branch = docParams.branch || Meteor.settings.public.redoc.branch || "master";
+  params.slug = docParams.splat;
+  if (baseURL) {
+    params.slug = docParams.splat.replace(new RegExp(`^${baseURL}/?`), '');
+  }
+
+  // defaults to welcome page if no particular doc requested
+  if (docParams.splat === '' || docParams.splat === baseURL || !params.slug) {
+    params.slug = `${params.branch}/welcome`;
+  }
 
   // Set params for doc if docParams is empty using the default doc params
   if (Object.keys(docParams).length === 0) {
@@ -50,7 +57,7 @@ Meteor.publish("CacheDocs", function (docParams) {
     });
 
     params.repo = defaultToc.repo;
-    params.alias = defaultToc.alias;
+    params.slug = defaultToc.slug;
   }
 
   // get repo details
@@ -76,7 +83,7 @@ Meteor.publish("CacheDocs", function (docParams) {
 
   // assemble TOC
   let docTOC = ReDoc.Collections.TOC.findOne({
-    alias: params.alias,
+    slug: params.slug,
     repo: params.repo
   });
 
@@ -84,7 +91,7 @@ Meteor.publish("CacheDocs", function (docParams) {
   let cacheDoc = ReDoc.Collections.Docs.find({
     repo: params.repo,
     branch: params.branch,
-    alias: params.alias
+    slug: params.slug
   });
 
   // check if we need to fetch new docs

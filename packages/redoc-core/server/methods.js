@@ -39,14 +39,14 @@ md = require("markdown-it")({
     if (!isImage && !hasProtocol) {
       switch (link.charAt(0)) {
       case "#":
-        newLink = `${global.baseURL}` + (Meteor.settings.public.redoc.repoInLinks ? `/${env.repo}` : '') + `/${env.branch}/${env.alias}${link}`;
+        newLink = `${global.baseURL}/${env.slug}${link}`;
         break;
       case "/":
         tocItem = ReDoc.Collections.TOC.findOne({
           docPath: link.substring(1)
         });
         if (tocItem) {
-          newLink = `${global.baseURL}` + (Meteor.settings.public.redoc.repoInLinks ? `/${tocItem.repo}` : '') + `/${env.branch}/${tocItem.alias}`;
+          newLink = `${global.baseURL}/${tocItem.slug}`;
         }
         break;
       default:
@@ -83,13 +83,14 @@ function getDoc(options) {
     branch: options.branch || "development",
     repo: options.repo,
     docPath: tocItem.docPath,
-    alias: tocItem.alias
+    alias: tocItem.alias,
+    slug: tocItem.slug
   });
 }
 
 
 function loadAndSaveDoc(docData) {
-  const { alias, docPath, repo, rawUrl, branch } = docData;
+  const { alias, docPath, repo, rawUrl, branch, slug } = docData;
 
   let docSourceUrl = `${rawUrl}/${branch}/${docPath}`;
 
@@ -105,6 +106,10 @@ function loadAndSaveDoc(docData) {
       // if TOC has different alias, we'll use that
       if (alias) {
         docSet.alias = alias;
+      }
+
+      if (slug) {
+        docSet.slug = slug;
       }
 
       // pre-process documentation
@@ -350,6 +355,10 @@ Meteor.methods({
             docSet.alias = tocItem.alias;
           }
 
+          if (tocItem.slug) {
+            docSet.slug = tocItem.slug;
+          }
+
            // if TOC has different label, we'll use that
           if (tocItem.label) {
             let label = tocItem.label;
@@ -475,6 +484,23 @@ Meteor.methods({
           if (tocItem.type === 'dir') {
             tocData.docPath += '/README.md';
           }
+
+          // check for parent doc for slug creation
+          let slug = '';
+          let slugParentDoc = {};
+          if (tocData.parentPath) {
+            slugParentDoc = ReDoc.Collections.TOC.findOne({ docPath: tocData.parentPath + '/README.md' });
+            if (slugParentDoc) {
+              slug = slugParentDoc.slug + '/' + s.slugify(tocData.label);
+            }
+          } else {
+            if (Meteor.settings.public.redoc.repoInLinks) {
+              slug = `${repo}/${branch}/${s.slugify(tocData.label)}`;
+            } else {
+              slug = `${branch}/${s.slugify(tocData.label)}`;
+            }
+          }
+          tocData.slug = slug;
           ReDoc.Collections.TOC.insert(tocData);
           if (tocItem.type === 'dir') {
             Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path, (level || 1) + 1);

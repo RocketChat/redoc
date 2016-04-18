@@ -67,13 +67,7 @@ export default DocView = React.createClass({
 
     for (let item of parentItems) {
       const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
-      let url = '';
-
-      if (Meteor.settings.public.redoc.repoInLinks) {
-        url += `${global.baseURL}/${item.repo}/${branch}/${item.alias}`;
-      } else {
-        url += `${global.baseURL}/${branch}/${item.alias}`;
-      }
+      let url = `${global.baseURL}/${item.slug}`;
 
       let subList;
 
