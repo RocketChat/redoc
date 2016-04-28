@@ -50,7 +50,12 @@ md = require("markdown-it")({
         }
         break;
       default:
-        newlink = link;
+        if (link.search(/\.([a-zA-Z0-9])+$/) !== -1) {
+          newLink = `${env.rawUrl}/${env.branch}/${env.docPath.replace('README.md', link)}`;
+        } else {
+          newLink = s.slugify(decodeURIComponent(link.replace(/^(\d+)[ \.]+/, '')));
+        }
+        break;
       }
     }
     return newLink;
@@ -120,6 +125,7 @@ function loadAndSaveDoc(docData) {
 
       docSet.docPageContent = result.content;
       docSet.docPageContentHTML = md.render(result.content, {
+        docPath,
         rawUrl: rawUrl,
         branch: branch,
         alias: docSet.alias,
@@ -379,6 +385,7 @@ Meteor.methods({
 
           docSet.docPageContent = result.content;
           docSet.docPageContentHTML = md.render(result.content, {
+            docPath: tocItem.docPath,
             rawUrl: docRepo.rawUrl,
             branch: branch,
             alias: tocItem.alias,
