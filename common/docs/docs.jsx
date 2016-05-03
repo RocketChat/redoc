@@ -28,6 +28,22 @@ export default DocView = React.createClass({
   getMeteorData() {
     const sub = Meteor.subscribe("CacheDocs", this.props.params);
 
+    const baseURL = global.baseURL ? global.baseURL.substring(1) : null;
+    const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
+
+    // Set params defaults
+    const query = {};
+    query.slug = this.props.params.splat;
+    if (baseURL) {
+      query.slug = this.props.params.splat.replace(new RegExp(`^${baseURL}/?`), '');
+    }
+
+    // defaults to welcome page if no particular doc requested
+    if (this.props.params.splat === '' || this.props.params.splat === baseURL || !query.slug) {
+      query.slug = `${branch}/welcome`;
+    }
+
+
     if (Meteor.isClient) {
       const search = DocSearch.getData({
         transform: (matchText, regExp) => {
@@ -37,7 +53,7 @@ export default DocView = React.createClass({
 
       return {
         docIsLoaded: sub.ready(),
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        currentDoc: ReDoc.Collections.Docs.findOne(query),
         search: search
       };
     }
@@ -45,7 +61,7 @@ export default DocView = React.createClass({
     if (Meteor.isServer) {
       return {
         docIsLoaded: true,
-        currentDoc: ReDoc.Collections.Docs.findOne(this.props.params),
+        currentDoc: ReDoc.Collections.Docs.findOne(query),
         search: []
       };
     }

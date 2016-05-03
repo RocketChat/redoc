@@ -8,11 +8,12 @@ import { Meteor } from "meteor/meteor";
  *  @param {String} path - optional path
  *  @returns {undefined} returns
  **/
-function getRepoToc(repo, fetchBranch, path) {
+function getRepoToc(repo, fetchBranch, path, level) {
   this.unblock();
   check(repo, String);
   check(fetchBranch,  Match.Optional(String, null));
-  check(path,  Match.Optional(String, null));
+  check(path, Match.Optional(String, null));
+  check(level, Match.Optional(Number, null));
 
   // get repo details
   const docRepo = ReDoc.Collections.Repos.findOne({
@@ -76,14 +77,36 @@ function getRepoToc(repo, fetchBranch, path) {
           tocData.default = true;
         }
         if (path) {
+          tocData.class = tocItem.type === 'dir' ? 'guide-nav-item' : 'guide-sub-nav-item';
           tocData.parentPath = encodeURIComponent(path);
+        } else {
+          tocData.class = 'guide-nav-item';
+        }
+        if (level > 1) {
+          tocData.class += ' level-' + level;
         }
         if (tocItem.type === 'dir') {
           tocData.docPath += '/README.md';
         }
+
+        // check for parent doc for slug creation
+        let slug = '';
+        let slugParentDoc = {};
+        if (tocData.parentPath) {
+          slugParentDoc = ReDoc.Collections.TOC.findOne({ docPath: tocData.parentPath + '/README.md' });
+          if (slugParentDoc) {
+            slug = slugParentDoc.slug + '/' + s.slugify(tocData.label);
+          }
+        } else {
+          if (Meteor.settings.public.redoc.repoInLinks) {
+            slug = `${repo}/${branch}/${s.slugify(tocData.label)}`;
+          } else {
+            slug = `${branch}/${s.slugify(tocData.label)}`;
+          }
+        }
         ReDoc.Collections.TOC.insert(tocData);
         if (tocItem.type === 'dir') {
-          Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path);
+          Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path, (level || 1) + 1);
         }
       }
     }

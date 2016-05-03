@@ -1,16 +1,9 @@
 {
   "repos": [{
-    "org": "reactioncommerce",
-    "repo": "redoc",
-    "label": "Redoc",
-    "description": "redoc documentation"
-  }],
-  "tocData": [{
-    "class": "guide-nav-item",
-    "alias": "intro",
-    "label": "Introduction",
-    "repo": "redoc",
-    "docPath": "README.md",
-    "default": true
+    "org": "RocketChat",
+    "repo": "Rocket.Chat.Docs",
+    "label": "Rocket.Chat Docs",
+    "description": "Rocket.Chat Documentation",
+    "docPath": "README.md"
   }]
 }

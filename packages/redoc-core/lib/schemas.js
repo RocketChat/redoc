@@ -105,7 +105,15 @@ ReDoc.Schemas.TOC = new SimpleSchema({
   repo: {
     type: String
   },
+  branch: {
+    type: String,
+    optional: true
+  },
   parentPath: {
+    type: String,
+    optional: true
+  },
+  slug: {
     type: String,
     optional: true
   },
@@ -162,6 +170,10 @@ ReDoc.Schemas.Docs = new SimpleSchema({
   },
   docPath: {
     type: String
+  },
+  slug: {
+    type: String,
+    optional: true
   },
   docParsed: {
     type: [Object],

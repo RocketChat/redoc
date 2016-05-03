@@ -33,18 +33,22 @@ const md = MarkdownIt({
     if (!isImage && !hasProtocol) {
       switch (link.charAt(0)) {
       case "#":
-        newLink = `/${env.repo}/${env.branch}/${env.alias}${link}`;
+        newLink = `${global.baseURL}/${env.slug}${link}`;
         break;
       case "/":
         tocItem = ReDoc.Collections.TOC.findOne({
           docPath: link.substring(1)
         });
         if (tocItem) {
-          newLink = `/${tocItem.repo}/${env.branch}/${tocItem.alias}`;
+          newLink = `${global.baseURL}/${tocItem.slug}`;
         }
         break;
       default:
-        newlink = link;
+        if (link.search(/\.([a-zA-Z0-9])+$/) !== -1) {
+          newLink = `${env.rawUrl}/${env.branch}/${env.docPath.replace('README.md', link)}`;
+        } else {
+          newLink = s.slugify(decodeURIComponent(link.replace(/^(\d+)[ \.]+/, '')));
+        }
       }
     }
     return newLink;
@@ -73,6 +77,7 @@ function article({ docUrl, content }) {
 
 function processDoc({docRepo, tocItem, ...options}) {
   const alias = options.alias || tocItem.alias;
+  const slug = options.slug || tocItem.slug;
   const style = options.style || tocItem.style;
   const rawUrl = options.rawUrl || docRepo.rawUrl;
   const repo = options.repo;
@@ -96,6 +101,10 @@ function processDoc({docRepo, tocItem, ...options}) {
         docSet.alias = alias;
       }
 
+      if (slug) {
+        docSet.slug = slug;
+      }
+
       // if TOC has different label, we'll use that
       if (tocItem.label) {
         let label = tocItem.label;
@@ -103,7 +112,7 @@ function processDoc({docRepo, tocItem, ...options}) {
           const parentDoc = ReDoc.Collections.TOC.findOne({ docPath: tocItem.parentPath + "/README.md" });
 
           if (parentDoc) {
-            label = parent.label + " - " + label;
+            label = parentDoc.label + " - " + label;
           }
         }
         docSet.label = label;
@@ -112,7 +121,8 @@ function processDoc({docRepo, tocItem, ...options}) {
       // pre-process documentation
       if (!result.content) {
         console.log(`redoc/getDocSet: Docset not found for ${docSet.docPath}.`);
-        result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
+        result.content = `# ${docSet.labell || tocItem.label || ''}` // `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
+        // result.content = `# Not found. \n  ${docSourceUrl}`; // default not found, should replace with custom tpl.
       }
 
       let documentContent = article({
