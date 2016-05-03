@@ -2,6 +2,7 @@ import { Meteor } from "meteor/meteor";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
 import TOCParser from "../../lib/plugins/toc";
+import s from "underscore.string";
 
 const md = MarkdownIt({
   html: true,
