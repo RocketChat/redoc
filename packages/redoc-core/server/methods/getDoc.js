@@ -46,6 +46,7 @@ function getDoc(options) {
     branch: options.branch,
     repo: options.repo,
     alias: options.alias,
+    slug: tocItem.slug,
     docRepo,
     tocItem
   });

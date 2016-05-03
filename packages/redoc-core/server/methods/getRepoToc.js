@@ -105,6 +105,7 @@ function getRepoToc(repo, fetchBranch, path, level) {
             slug = `${branch}/${s.slugify(tocData.label)}`;
           }
         }
+        tocData.slug = slug;
         ReDoc.Collections.TOC.insert(tocData);
         if (tocItem.type === 'dir') {
           Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path, (level || 1) + 1);

@@ -50,6 +50,7 @@ const md = MarkdownIt({
         } else {
           newLink = s.slugify(decodeURIComponent(link.replace(/^(\d+)[ \.]+/, '')));
         }
+        break;
       }
     }
     return newLink;
@@ -137,7 +138,8 @@ function processDoc({docRepo, tocItem, ...options}) {
         branch,
         alias: docSet.alias,
         repo,
-        style
+        style,
+        docPath
       });
 
       // insert new documentation into Cache
