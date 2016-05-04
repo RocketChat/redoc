@@ -46,7 +46,7 @@ export default DocView = React.createClass({
 
     // defaults to welcome page if no particular doc requested
     if (this.props.params.splat === "" || this.props.params.splat === "/" || this.props.params.splat === baseURL || !query.slug) {
-      query.slug = `${branch}/welcome`;
+      query.slug = 'welcome';
     }
 
 
