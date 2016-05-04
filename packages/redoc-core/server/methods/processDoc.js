@@ -78,10 +78,13 @@ function processDoc({docRepo, tocItem, ...options}) {
   const rawUrl = options.rawUrl || docRepo.rawUrl;
   const repo = options.repo;
   const branch = options.branch || "master";
+  const sha = options.sha;
   const docPath = tocItem.docPath;
   const docHtmlUrl = docRepo.data.html_url;
   const docSourceUrl = `${rawUrl}/${branch}/${docPath}`;
   const docRepoUrl = `${docHtmlUrl}/tree/${branch}/${docPath}`;
+
+  console.log('processDoc', docSourceUrl);
 
   // lets fetch that Github repo
   Meteor.http.get(docSourceUrl, function (error, result) {
@@ -95,6 +98,10 @@ function processDoc({docRepo, tocItem, ...options}) {
       // if TOC has different alias, we'll use that
       if (alias) {
         docSet.alias = alias;
+      }
+
+      if (sha) {
+        docSet.sha = sha;
       }
 
       if (slug) {
@@ -136,6 +143,8 @@ function processDoc({docRepo, tocItem, ...options}) {
         docPath,
         tocItem
       });
+
+      ReDoc.Collections.TOC.update({ _id: tocItem._id }, { $set: { updated: true }, $unset: { updating: 1 } });
 
       // insert new documentation into Cache
       return ReDoc.Collections.Docs.upsert({

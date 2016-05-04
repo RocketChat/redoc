@@ -26,7 +26,8 @@ function getDocSet(repo, fetchBranch) {
 
   // assemble TOC
   let docTOC = ReDoc.Collections.TOC.find({
-    repo: repo
+    repo: repo,
+    updating: true
   }).fetch();
 
   for (let tocItem of docTOC) {
@@ -34,7 +35,8 @@ function getDocSet(repo, fetchBranch) {
       repo,
       branch,
       docRepo,
-      tocItem
+      tocItem,
+      sha: tocItem.sha
     });
   }
 }

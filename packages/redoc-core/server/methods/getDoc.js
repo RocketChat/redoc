@@ -9,11 +9,12 @@ import processDoc from "./processDoc";
  *  @returns {undefined} returns
  */
 function flushDocCache() {
-  ReDoc.Collections.Repos.remove({});
-  ReDoc.Collections.TOC.remove({});
-  ReDoc.Collections.Docs.remove({});
+  ReDoc.Collections.TOC.update({}, { $unset: { updated: 1, updating: 1 } }, { multi: true });
+  ReDoc.Collections.Repos.find().forEach(function(repo) {
+    Meteor.call("redoc/getRepoTOC", repo.repo, Meteor.settings.public.redoc.branch || docRepo.defaultBranch);
+  });
 
-  initRepoData();
+  ReDoc.Collections.TOC.update({ updated: { $ne: true } }, { $set: { expired: true } }, { multi: true });
 }
 
 /**
@@ -48,7 +49,8 @@ function getDoc(options) {
     alias: options.alias,
     slug: tocItem.slug,
     docRepo,
-    tocItem
+    tocItem,
+    sha: tocItem.sha
   });
 }
 

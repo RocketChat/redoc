@@ -117,11 +117,31 @@ ReDoc.Schemas.TOC = new SimpleSchema({
     type: String,
     optional: true
   },
+  sha: {
+    type: String,
+    optional: true,
+    index: true
+  },
   documentTOC: {
     type: [ReDoc.Schemas.DocumentTOC],
     optional: true
   },
   default: {
+    type: Boolean,
+    defaultValue: false,
+    optional: true
+  },
+  updated: {
+    type: Boolean,
+    defaultValue: false,
+    optional: true
+  },
+  updating: {
+    type: Boolean,
+    defaultValue: false,
+    optional: true
+  },
+  expired: {
     type: Boolean,
     defaultValue: false,
     optional: true
@@ -174,6 +194,11 @@ ReDoc.Schemas.Docs = new SimpleSchema({
   slug: {
     type: String,
     optional: true
+  },
+  sha: {
+    type: String,
+    optional: true,
+    index: true
   },
   docParsed: {
     type: [Object],

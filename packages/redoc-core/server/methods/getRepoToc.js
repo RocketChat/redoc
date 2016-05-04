@@ -43,6 +43,9 @@ function getRepoToc(repo, fetchBranch, path, level) {
 
     // assemble TOC
     let requestUrl = docRepo.contentsUrl.replace("{+path}", path ? encodeURIComponent(path) : "") + authString + '&ref=' + branch;
+
+    console.log('getTOC', requestUrl);
+
     let contentData = Meteor.http.get(requestUrl, {
       headers: {
         "User-Agent": "ReDoc/1.0"
@@ -64,13 +67,15 @@ function getRepoToc(repo, fetchBranch, path, level) {
           sort = parseInt(sortIndex);
         }
         let tocData = {
+          updating: true,
           alias: s.slugify(s.strLeftBack(tocItem.path, '.md').replace(/^(\d+)[ \.]+/, '')),
           label: s.strLeftBack(tocItem.name, '.md').replace(/^(\d+)[ \.]+/, ''),
           repo: repo,
           branch: branch,
           position: sort,
           docPath: encodeURIComponent(tocItem.path),
-          slug: slugifyPath(tocItem.path.replace("README.md", ""), /^\d+(\.\d+)*\.?/)
+          slug: slugifyPath(tocItem.path.replace("README.md", ""), /^\d+(\.\d+)*\.?/),
+          sha: tocItem.sha
         };
         // First README.md, on root
         if (tocItem.path === "README.md") {
@@ -93,7 +98,11 @@ function getRepoToc(repo, fetchBranch, path, level) {
           tocData.docPath += '/README.md';
         }
 
-        ReDoc.Collections.TOC.insert(tocData);
+        if (ReDoc.Collections.TOC.findOne({ slug: tocData.slug, sha: tocData.sha })) {
+          ReDoc.Collections.TOC.update({ slug: tocData.slug, sha: tocData.sha }, { $set: { updated: true } });
+        } else {
+          ReDoc.Collections.TOC.upsert({ slug: tocData.slug }, { $set: tocData });
+        }
         if (tocItem.type === 'dir') {
           Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path, (level || 1) + 1);
         }
