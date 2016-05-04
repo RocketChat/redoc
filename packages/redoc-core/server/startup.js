@@ -25,7 +25,7 @@ SyncedCron.add({
   }
 });
 
-SyncedCron.start();
+// SyncedCron.start();
 
 Meteor.startup(function () {
   // Import settings

@@ -149,6 +149,7 @@ ReDoc.Schemas.TOC = new SimpleSchema({
   createdAt: {
     type: Date,
     label: "Date",
+    optional: true,
     autoValue: function () {
       if (this.isInsert) {
         return new Date();
