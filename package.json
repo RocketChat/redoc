@@ -42,6 +42,7 @@
     "react-router": "^2.3.0",
     "react-select": "^1.0.0-beta12",
     "sha1": "^1.1.1",
+    "slugify-path": "^1.2.0",
     "underscore": "^1.8.3",
     "underscore.string": "^3.3.4",
     "url": "^0.11.0"

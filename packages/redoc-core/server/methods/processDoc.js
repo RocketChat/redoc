@@ -2,7 +2,7 @@ import { Meteor } from "meteor/meteor";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
 import TOCParser from "../../lib/plugins/toc";
-import s from "underscore.string";
+import slugifyPath from "slugify-path";
 
 const md = MarkdownIt({
   html: true,
@@ -34,21 +34,15 @@ const md = MarkdownIt({
     if (!isImage && !hasProtocol) {
       switch (link.charAt(0)) {
       case "#":
-        newLink = `${global.baseURL}/${env.slug}${link}`;
         break;
       case "/":
-        tocItem = ReDoc.Collections.TOC.findOne({
-          docPath: link.substring(1)
-        });
-        if (tocItem) {
-          newLink = `${global.baseURL}/${tocItem.slug}`;
-        }
+        newLink = `${global.baseURL}/${slugifyPath(decodeURIComponent(link.substring(1)), /^\d+(\.\d+)*\.?/)}`;
         break;
       default:
         if (link.search(/\.([a-zA-Z0-9])+$/) !== -1) {
-          newLink = `${env.rawUrl}/${env.branch}/${env.docPath.replace('README.md', link)}`;
+          newLink = `${env.rawUrl}/${env.branch}/${env.docPath.replace("README.md", link)}`;
         } else {
-          newLink = s.slugify(decodeURIComponent(link.replace(/^(\d+)[ \.]+/, '')));
+          newLink = `${global.baseURL}/${slugifyPath(decodeURIComponent(link), /^\d+(\.\d+)*\.?/)}`;
         }
         break;
       }
@@ -139,7 +133,8 @@ function processDoc({docRepo, tocItem, ...options}) {
         alias: docSet.alias,
         repo,
         style,
-        docPath
+        docPath,
+        tocItem
       });
 
       // insert new documentation into Cache

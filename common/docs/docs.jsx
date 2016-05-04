@@ -30,6 +30,7 @@ export default DocView = React.createClass({
 
     const baseURL = global.baseURL ? global.baseURL.substring(1) : null;
     const branch = this.props.params.branch || Meteor.settings.public.redoc.branch || "master";
+    const splatEndsWithHash = this.props.params.splat.match(/\#\S*$/);
 
     // Set params defaults
     const query = {};
@@ -38,8 +39,13 @@ export default DocView = React.createClass({
       query.slug = this.props.params.splat.replace(new RegExp(`^${baseURL}/?`), '');
     }
 
+    // omit #hash from our slug
+    if (splatEndsWithHash) {
+      query.slug = query.slug.replace(splatEndsWithHash[0], "");
+    }
+
     // defaults to welcome page if no particular doc requested
-    if (this.props.params.splat === '' || this.props.params.splat === baseURL || !query.slug) {
+    if (this.props.params.splat === "" || this.props.params.splat === "/" || this.props.params.splat === baseURL || !query.slug) {
       query.slug = `${branch}/welcome`;
     }
 
