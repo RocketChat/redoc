@@ -13,7 +13,7 @@ Meteor.publish("userData", function () {
 });
 
 Meteor.publish("TOC", function () {
-  return ReDoc.Collections.TOC.find({}, {
+  return ReDoc.Collections.TOC.find({ expired: { $ne: true } }, {
     sort: {
       position: 1
     }
