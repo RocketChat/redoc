@@ -53,7 +53,6 @@
   }],
   "redoc": {
     "schedule": "every 4 hours",
-    "initRepoData": "https://raw.githubusercontent.com/reactioncommerce/redoc/master/private/redoc.json",
     "users": [{
       "username": "",
       "roles": ["admin"]
