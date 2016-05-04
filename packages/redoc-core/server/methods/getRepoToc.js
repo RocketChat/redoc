@@ -1,5 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import s from "underscore.string";
+import slugifyPath from "slugify-path";
 
 /**
  *  redoc/getRepoTOC
@@ -68,12 +69,14 @@ function getRepoToc(repo, fetchBranch, path, level) {
           repo: repo,
           branch: branch,
           position: sort,
-          docPath: encodeURIComponent(tocItem.path)
+          docPath: encodeURIComponent(tocItem.path),
+          slug: slugifyPath(tocItem.path.replace("README.md", ""), /^\d+(\.\d+)*\.?/)
         };
         // First README.md, on root
         if (tocItem.path === "README.md") {
           tocData.alias = 'welcome';
           tocData.label = 'Welcome';
+          tocData.slug = 'welcome';
           tocData.position = 0;
           tocData.default = true;
         }
@@ -90,22 +93,6 @@ function getRepoToc(repo, fetchBranch, path, level) {
           tocData.docPath += '/README.md';
         }
 
-        // check for parent doc for slug creation
-        let slug = '';
-        let slugParentDoc = {};
-        if (tocData.parentPath) {
-          slugParentDoc = ReDoc.Collections.TOC.findOne({ docPath: tocData.parentPath + '/README.md' });
-          if (slugParentDoc) {
-            slug = slugParentDoc.slug + '/' + s.slugify(tocData.label);
-          }
-        } else {
-          if (Meteor.settings.public.redoc.repoInLinks) {
-            slug = `${repo}/${branch}/${s.slugify(tocData.label)}`;
-          } else {
-            slug = `${branch}/${s.slugify(tocData.label)}`;
-          }
-        }
-        tocData.slug = slug;
         ReDoc.Collections.TOC.insert(tocData);
         if (tocItem.type === 'dir') {
           Meteor.call("redoc/getRepoTOC", repo, branch, tocItem.path, (level || 1) + 1);
