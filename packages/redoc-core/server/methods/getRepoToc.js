@@ -99,6 +99,7 @@ function getRepoToc(repo, fetchBranch, path, level) {
             tocData.class += ' level-' + level;
           }
           if (tocItem.type === 'dir') {
+            tocData.position += 1000;
             tocData.docPath += '/README.md';
           }
 
