@@ -15,7 +15,7 @@ Meteor.startup(function () {
         let basename = s.rtrim(url.parse(__meteor_runtime_config__.ROOT_URL).pathname, "/");
 
         let Api = new Restivus({
-          apiPath: basename + "/api"
+          apiPath: "api"
         });
 
         Api.addRoute("updateDocs", {
