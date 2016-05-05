@@ -2,7 +2,7 @@
 
 import url from "url";
 import s from "underscore.string";
-import sha1 from "sha1";
+import crypto from "crypto-js";
 
 Meteor.startup(function () {
   if (Meteor.settings.services) {
@@ -23,7 +23,7 @@ Meteor.startup(function () {
         }, {
           post: function () {
             if (this.request && this.request.headers && this.request.headers["x-hub-signature"] === "sha1=" +
-              sha1(JSON.stringify(this.bodyParams), settings.webhook.updateDocs).toString()) {
+              crypto.HmacSHA1(JSON.stringify(this.bodyParams), settings.webhook.updateDocs).toString()) {
               Meteor.call("redoc/flushDocCache");
               return {
                 success: true
