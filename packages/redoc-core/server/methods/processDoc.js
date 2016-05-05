@@ -1,8 +1,9 @@
 import { Meteor } from "meteor/meteor";
 import MarkdownIt from "markdown-it";
 import hljs from "highlight.js";
-import TOCParser from "../../lib/plugins/toc";
+import TOCParser, { slugify } from "../../lib/plugins/toc";
 import slugifyPath from "slugify-path";
+import s from "underscore.string";
 
 const md = MarkdownIt({
   html: true,
@@ -25,27 +26,32 @@ const md = MarkdownIt({
 
   replaceLink: (link, env) => {
     const isImage = link.search(/([a-z\-_0-9\/\:\.]*\.(jpg|jpeg|png|gif))/i) > -1;
-    const hasProtocol = link.search(/^http[s]?\:\/\//) > -1;
+    const hasProtocol = link.search(/^[a-zA-Z]+:\/\//) > -1;
     let newLink = link;
     if (isImage && !hasProtocol) {
       newLink = `${env.rawUrl}/${env.branch}/${link}`;
     }
+
+    link = link.replace('README.md', '');
+
     // general link replacement for relative repo links
     if (!isImage && !hasProtocol) {
       switch (link.charAt(0)) {
       case "#":
+        newLink = `${global.baseURL}/${env.tocItem.slug}/#${slugify(newLink)}`; // swap any length of whitespace, underscore, hyphen characters with a single -
         break;
       case "/":
         newLink = `${global.baseURL}/${slugifyPath(decodeURIComponent(link.substring(1)), /^\d+(\.\d+)*\.?/)}`;
         break;
       default:
-        if (link.search(/\.([a-zA-Z0-9])+$/) !== -1) {
-          newLink = `${env.rawUrl}/${env.branch}/${env.docPath.replace("README.md", link)}`;
-        } else {
-          newLink = `${global.baseURL}/${env.tocItem.slug}/${slugifyPath(decodeURIComponent(link), /^\d+(\.\d+)*\.?/)}`;
-        }
+        newLink = `${global.baseURL}/${env.tocItem.slug}/${slugifyPath(decodeURIComponent(link), /^\d+(\.\d+)*\.?/)}`;
         break;
       }
+
+      ReDoc.Collections.Links.upsert({ slug: env.slug, link: s.trim(s.strRight(newLink, global.baseURL), '/') }, { $set: { repo: env.repo, branch: env.branch } });
+    }
+    if (link.substr(-1) === "/") {
+      newLink += "/";
     }
     return newLink;
   }
@@ -71,6 +77,27 @@ function article({ docUrl, content }) {
   );
 }
 
+function checkLinks() {
+  ReDoc.Collections.TOC.find({ expired: true }).forEach(function(toc) {
+    ReDoc.Collections.Links.remove({ slug: toc.slug });
+    ReDoc.Collections.Links.update({ link: toc.slug }, { $set: { expired: true }}, { multi: true });
+  });
+  ReDoc.Collections.Links.update({}, { $unset: { expired: true }}, { multi: true });
+  ReDoc.Collections.Links.find({}).forEach(function(link) {
+    [linkPart, hashPart] = link.link.split('#');
+    query = { slug: s.rtrim(linkPart, '/'), expired: { $ne: true } };
+
+    if (s.trim(hashPart)) {
+      query['documentTOC.slug'] = hashPart;
+    }
+
+    if (!ReDoc.Collections.TOC.findOne(query)) {
+      console.log('expire link', link);
+      ReDoc.Collections.Links.update({ link: link.link }, { $set: { expired: true }}, { multi: true });
+    }
+  });
+}
+
 function processDoc({docRepo, tocItem, ...options}) {
   const alias = options.alias || tocItem.alias;
   const slug = options.slug || tocItem.slug;
@@ -83,8 +110,6 @@ function processDoc({docRepo, tocItem, ...options}) {
   const docHtmlUrl = docRepo.data.html_url;
   const docSourceUrl = `${rawUrl}/${branch}/${docPath}`;
   const docRepoUrl = `${docHtmlUrl}/tree/${branch}/${docPath}`;
-
-  console.log('processDoc', docSourceUrl);
 
   // lets fetch that Github repo
   Meteor.http.get(docSourceUrl, function (error, result) {
@@ -133,6 +158,8 @@ function processDoc({docRepo, tocItem, ...options}) {
         content: result.content
       });
 
+      ReDoc.Collections.Links.remove({ slug: slug });
+
       docSet.docPageContent = documentContent;
       docSet.docPageContentHTML = md.render(documentContent, {
         rawUrl,
@@ -141,17 +168,28 @@ function processDoc({docRepo, tocItem, ...options}) {
         repo,
         style,
         docPath,
-        tocItem
+        tocItem,
+        slug
       });
 
       ReDoc.Collections.TOC.update({ _id: tocItem._id }, { $set: { updated: true }, $unset: { updating: 1 } });
 
       // insert new documentation into Cache
-      return ReDoc.Collections.Docs.upsert({
+      upsertResult = ReDoc.Collections.Docs.upsert({
         docPage: docSourceUrl
       }, {
         $set: docSet
       });
+
+
+      global.DocCounter--;
+      if (global.DocCounter === 0) {
+        ReDoc.Collections.TOC.update({ updated: { $ne: true } }, { $set: { expired: true } }, { multi: true });
+        checkLinks();
+      }
+
+      return upsertResult;
+
     }
   });
 }

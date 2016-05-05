@@ -103,10 +103,6 @@ Meteor.publish("CacheDocs", function (docParams) {
     slug: params.slug
   });
 
-  // check if we need to fetch new docs
-  if (cacheDoc.count() === 0 && docTOC) {
-    Meteor.call("redoc/getDocSet", params.repo, params.branch);
-  }
   // return cache doc
   return cacheDoc;
 });

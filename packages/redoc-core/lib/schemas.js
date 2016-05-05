@@ -70,7 +70,8 @@ ReDoc.Schemas.DocumentTOC = new SimpleSchema({
     type: String
   },
   slug: {
-    type: String
+    type: String,
+    index: true
   }
 });
 
@@ -88,7 +89,8 @@ ReDoc.Schemas.TOC = new SimpleSchema({
     optional: true
   },
   alias: {
-    type: String
+    type: String,
+    index: true
   },
   label: {
     type: String,
@@ -96,26 +98,31 @@ ReDoc.Schemas.TOC = new SimpleSchema({
   },
   docPath: {
     type: String,
-    optional: true
+    optional: true,
+    index: true
   },
   docIncludes: {
     type: [String],
     optional: true
   },
   repo: {
-    type: String
+    type: String,
+    index: true
   },
   branch: {
     type: String,
-    optional: true
+    optional: true,
+    index: true
   },
   parentPath: {
     type: String,
-    optional: true
+    optional: true,
+    index: true
   },
   slug: {
     type: String,
-    optional: true
+    optional: true,
+    index: true
   },
   sha: {
     type: String,
@@ -129,22 +136,26 @@ ReDoc.Schemas.TOC = new SimpleSchema({
   default: {
     type: Boolean,
     defaultValue: false,
-    optional: true
+    optional: true,
+    index: true
   },
   updated: {
     type: Boolean,
     defaultValue: false,
-    optional: true
+    optional: true,
+    index: true
   },
   updating: {
     type: Boolean,
     defaultValue: false,
-    optional: true
+    optional: true,
+    index: true
   },
   expired: {
     type: Boolean,
     defaultValue: false,
-    optional: true
+    optional: true,
+    index: true
   },
   createdAt: {
     type: Date,
@@ -165,16 +176,20 @@ ReDoc.Collections.TOC.attachSchema(ReDoc.Schemas.TOC);
 //
 ReDoc.Schemas.Docs = new SimpleSchema({
   org: {
-    type: String
+    type: String,
+    index: true
   },
   repo: {
-    type: String
+    type: String,
+    index: true
   },
   branch: {
-    type: String
+    type: String,
+    index: true
   },
   alias: {
-    type: String
+    type: String,
+    index: true
   },
   label: {
     type: String
@@ -190,11 +205,13 @@ ReDoc.Schemas.Docs = new SimpleSchema({
     type: String
   },
   docPath: {
-    type: String
+    type: String,
+    index: true
   },
   slug: {
     type: String,
-    optional: true
+    optional: true,
+    index: true
   },
   sha: {
     type: String,
@@ -205,6 +222,43 @@ ReDoc.Schemas.Docs = new SimpleSchema({
     type: [Object],
     blackbox: true,
     optional: true
+  },
+  createdAt: {
+    type: Date,
+    label: "Date",
+    optional: true,
+    autoValue: function () {
+      if (this.isInsert) {
+        return new Date();
+      }
+    }
+  }
+});
+
+//
+// Links
+//
+ReDoc.Schemas.Links = new SimpleSchema({
+  repo: {
+    type: String,
+    index: true
+  },
+  branch: {
+    type: String,
+    index: true
+  },
+  slug: {
+    type: String,
+    index: true
+  },
+  link: {
+    type: String,
+    index: true
+  },
+  expired: {
+    type: Boolean,
+    optional: true,
+    index: true
   },
   createdAt: {
     type: Date,

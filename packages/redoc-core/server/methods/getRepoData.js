@@ -8,7 +8,6 @@ import { Meteor } from "meteor/meteor";
  *  @returns {undefined} returns
  */
 function getRepoData() {
-  this.unblock();
   const repos = ReDoc.Collections.Repos.find().fetch();
   // default authString
   if (authString === undefined) {
@@ -65,8 +64,6 @@ function getRepoData() {
             }
           });
         }
-        // populate docset
-        Meteor.call("redoc/getDocSet", repo.repo);
       }
     }
   } // end loop

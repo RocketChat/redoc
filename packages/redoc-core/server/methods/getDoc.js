@@ -10,11 +10,11 @@ import processDoc from "./processDoc";
  */
 function flushDocCache() {
   ReDoc.Collections.TOC.update({}, { $unset: { updated: 1, updating: 1 } }, { multi: true });
+
+  global.TOCCounter = 1;
   ReDoc.Collections.Repos.find().forEach(function(repo) {
     Meteor.call("redoc/getRepoTOC", repo.repo, Meteor.settings.public.redoc.branch || docRepo.defaultBranch);
   });
-
-  ReDoc.Collections.TOC.update({ updated: { $ne: true } }, { $set: { expired: true } }, { multi: true });
 }
 
 /**

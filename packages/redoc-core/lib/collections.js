@@ -19,3 +19,6 @@ ReDoc.Collections.TOC = new Mongo.Collection("TOC");
 
 // DOCS caching for Markdown Docs found in TOC
 ReDoc.Collections.Docs = new Mongo.Collection("Docs");
+
+// Links
+ReDoc.Collections.Links = new Mongo.Collection("Links");

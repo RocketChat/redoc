@@ -1,6 +1,6 @@
 "use strict";
 
-import _ from "underscore"
+import _ from "underscore";
 
 function isBlankString(str) {
   return !!(str||'').match(/^\s*$/);
@@ -36,7 +36,7 @@ function TOCParser(md) {
           const nextToken = state.tokens[index + 1];
           const headingLevel = parseInt(blockToken.tag.replace("h", ""), 10);
 
-          if (headingLevel < 2 || headingLevel > 3) {
+          if (headingLevel < 2 || headingLevel > 4) {
             return;
           }
 
@@ -44,13 +44,13 @@ function TOCParser(md) {
           if (nextToken.type === "inline" && nextToken.children) {
             for (let node of nextToken.children) {
               if (node.type === "text" || nextToken.type === "inline") {
+                const slug = slugify(node.content);
+                const { alias, repo } = state.env;
                 const data = {
                   level: headingLevel,
                   content: node.content,
-                  slug: slugify(node.content)
+                  slug: slug
                 };
-                const { alias, repo } = state.env;
-                const slug = slugify(node.content);
 
                 if (_.isFunction(md.options.processTOCHeadings)) {
                   md.options.processTOCHeadings(data, state.env);
@@ -82,3 +82,4 @@ function TOCParser(md) {
 }
 
 export default TOCParser;
+export { slugify };

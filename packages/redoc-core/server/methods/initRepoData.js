@@ -68,9 +68,10 @@ function initWithRepoData() {
 
   // If TOC is still empty, get TOC from Repository
   if (ReDoc.Collections.TOC.find().count() === 0) {
+    global.TOCCounter = 1;
     ReDoc.Collections.Repos.find().forEach(function(repo) {
       Meteor.call("redoc/getRepoTOC", repo.repo, Meteor.settings.public.redoc.branch || docRepo.defaultBranch);
-    })
+    });
   }
 }
 

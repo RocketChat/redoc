@@ -30,6 +30,7 @@ function getDocSet(repo, fetchBranch) {
     updating: true
   }).fetch();
 
+  global.DocCounter = docTOC.length;
   for (let tocItem of docTOC) {
     processDoc({
       repo,
