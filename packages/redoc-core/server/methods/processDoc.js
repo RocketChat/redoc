@@ -42,7 +42,7 @@ const md = MarkdownIt({
         if (link.search(/\.([a-zA-Z0-9])+$/) !== -1) {
           newLink = `${env.rawUrl}/${env.branch}/${env.docPath.replace("README.md", link)}`;
         } else {
-          newLink = `${global.baseURL}/${slugifyPath(decodeURIComponent(link), /^\d+(\.\d+)*\.?/)}`;
+          newLink = `${global.baseURL}/${env.tocItem.slug}/${slugifyPath(decodeURIComponent(link), /^\d+(\.\d+)*\.?/)}`;
         }
         break;
       }

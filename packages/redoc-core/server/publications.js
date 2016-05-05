@@ -56,7 +56,7 @@ Meteor.publish("CacheDocs", function (docParams) {
 
   // defaults to welcome page if no particular doc requested
   if (docParams.splat === '' || docParams.splat === baseURL || !params.slug) {
-    params.slug = `${params.branch}/welcome`;
+    params.slug = 'welcome';
   }
 
   // Set params for doc if docParams is empty using the default doc params
